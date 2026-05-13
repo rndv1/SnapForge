@@ -20,6 +20,13 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         "dark"
     };
 
+    private static readonly Dictionary<string, (int Width, int Height)> PresetSizes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["github"] = (1280, 720),
+        ["social"] = (1080, 1080),
+        ["portfolio"] = (1600, 900)
+    };
+
     public sealed class Settings : CommandSettings
     {
         [CommandArgument(0, "<input>")]
@@ -124,8 +131,36 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 
     protected override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
     {
-        AnsiConsole.MarkupLine("[yellow]SnapForge card rendering is not wired yet.[/]");
-        AnsiConsole.MarkupLine("[grey]This command will be connected to the renderer in a later PR.[/]");
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var inputPath = Path.GetFullPath(settings.Input!);
+        var outputPath = Path.GetFullPath(settings.Output!);
+        var outputDirectory = Path.GetDirectoryName(outputPath);
+        if (!string.IsNullOrWhiteSpace(outputDirectory))
+        {
+            Directory.CreateDirectory(outputDirectory);
+        }
+
+        var preset = settings.Preset!.Trim().ToLowerInvariant();
+        var theme = settings.Theme!.Trim().ToLowerInvariant();
+        var size = PresetSizes[preset];
+
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.Grey)
+            .AddColumn(new TableColumn("[grey]Field[/]"))
+            .AddColumn(new TableColumn("[grey]Value[/]"));
+
+        table.AddRow("Input path", Markup.Escape(inputPath));
+        table.AddRow("Output path", Markup.Escape(outputPath));
+        table.AddRow("Selected preset", preset);
+        table.AddRow("Selected theme", theme);
+        table.AddRow("Final image size", $"{size.Width}x{size.Height}");
+        table.AddRow("Status", "[yellow]Renderer pending[/]");
+
+        AnsiConsole.Write(new Rule("[bold]SnapForge card[/]").RuleStyle("grey"));
+        AnsiConsole.Write(table);
+        AnsiConsole.MarkupLine("[grey]The ImageSharp rendering pipeline will be added in PR #4.[/]");
 
         return 0;
     }
