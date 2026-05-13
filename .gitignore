@@ -1,0 +1,37 @@
+# Build results
+bin/
+obj/
+artifacts/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+TestResults/
+*.vsp
+*.vspx
+*.coverage
+*.coveragexml
+
+# JetBrains Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# SnapForge generated examples
+examples/output/*
+!examples/output/.gitkeep
