@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using SnapForge.Cli.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -6,6 +7,19 @@ namespace SnapForge.Cli.Commands;
 
 public sealed class CardCommand : Command<CardCommand.Settings>
 {
+    private static readonly HashSet<string> SupportedPresets = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "github",
+        "social",
+        "portfolio"
+    };
+
+    private static readonly HashSet<string> SupportedThemes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "light",
+        "dark"
+    };
+
     public sealed class Settings : CommandSettings
     {
         [CommandArgument(0, "<input>")]
@@ -31,6 +45,81 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         [CommandOption("--theme <theme>")]
         [Description("Card theme: light or dark.")]
         public string? Theme { get; set; }
+    }
+
+    protected override ValidationResult Validate(CommandContext context, Settings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.Input))
+        {
+            return ValidationResult.Error("Input path is required.");
+        }
+
+        if (!PathHelper.TryResolveFullPath(settings.Input, out var inputPath, out var inputPathError))
+        {
+            return ValidationResult.Error($"Input path is invalid: {inputPathError}");
+        }
+
+        if (!File.Exists(inputPath))
+        {
+            return ValidationResult.Error($"Input file does not exist: {inputPath}");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.Output))
+        {
+            return ValidationResult.Error("Output path is required. Use --output <path>.");
+        }
+
+        if (!PathHelper.TryResolveFullPath(settings.Output, out var outputPath, out var outputPathError))
+        {
+            return ValidationResult.Error($"Output path is invalid: {outputPathError}");
+        }
+
+        if (Directory.Exists(outputPath))
+        {
+            return ValidationResult.Error("Output path must include a PNG file name, not just a directory.");
+        }
+
+        if (!string.Equals(Path.GetExtension(outputPath), ".png", StringComparison.OrdinalIgnoreCase))
+        {
+            return ValidationResult.Error("Output file must use the .png extension.");
+        }
+
+        if (PathHelper.PathsEqual(inputPath, outputPath))
+        {
+            return ValidationResult.Error("Output path must be different from the input file. SnapForge never overwrites the source screenshot.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.Title))
+        {
+            return ValidationResult.Error("Title is required. Use --title <title>.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.Subtitle))
+        {
+            return ValidationResult.Error("Subtitle is required. Use --subtitle <subtitle>.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.Preset))
+        {
+            return ValidationResult.Error("Preset is required. Use --preset github, --preset social, or --preset portfolio.");
+        }
+
+        if (!SupportedPresets.Contains(settings.Preset))
+        {
+            return ValidationResult.Error($"Unknown preset '{settings.Preset}'. Supported presets: github, social, portfolio.");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.Theme))
+        {
+            return ValidationResult.Error("Theme is required. Use --theme light or --theme dark.");
+        }
+
+        if (!SupportedThemes.Contains(settings.Theme))
+        {
+            return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: light, dark.");
+        }
+
+        return ValidationResult.Success();
     }
 
     protected override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
