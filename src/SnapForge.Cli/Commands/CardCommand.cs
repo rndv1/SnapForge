@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using SnapForge.Cli.Presets;
+using SnapForge.Cli.Themes;
 using SnapForge.Cli.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -10,11 +11,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 {
     private static readonly PresetRegistry Presets = new(BuiltInPresets.All);
 
-    private static readonly HashSet<string> SupportedThemes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "light",
-        "dark"
-    };
+    private static readonly ThemeRegistry Themes = new(BuiltInThemes.All);
 
     public sealed class Settings : CommandSettings
     {
@@ -110,9 +107,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error("Theme is required. Use --theme light or --theme dark.");
         }
 
-        if (!SupportedThemes.Contains(settings.Theme))
+        if (!Themes.TryGet(settings.Theme, out _))
         {
-            return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: light, dark.");
+            return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: {Themes.FormatSupportedNames()}.");
         }
 
         return ValidationResult.Success();
@@ -131,8 +128,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         }
 
         Presets.TryGet(settings.Preset, out var preset);
-
-        var theme = settings.Theme!.Trim().ToLowerInvariant();
+        Themes.TryGet(settings.Theme, out var theme);
 
         var table = new Table()
             .Border(TableBorder.Rounded)
@@ -143,7 +139,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         table.AddRow("Input path", Markup.Escape(inputPath));
         table.AddRow("Output path", Markup.Escape(outputPath));
         table.AddRow("Selected preset", preset!.Name);
-        table.AddRow("Selected theme", theme);
+        table.AddRow("Selected theme", theme!.Name);
         table.AddRow("Final image size", $"{preset.Width}x{preset.Height}");
         table.AddRow("Status", "[yellow]Renderer pending[/]");
 
