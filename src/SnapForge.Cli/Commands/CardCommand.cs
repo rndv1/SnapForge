@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using SnapForge.Cli.Presets;
 using SnapForge.Cli.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,24 +8,12 @@ namespace SnapForge.Cli.Commands;
 
 public sealed class CardCommand : Command<CardCommand.Settings>
 {
-    private static readonly HashSet<string> SupportedPresets = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "github",
-        "social",
-        "portfolio"
-    };
+    private static readonly PresetRegistry Presets = new(BuiltInPresets.All);
 
     private static readonly HashSet<string> SupportedThemes = new(StringComparer.OrdinalIgnoreCase)
     {
         "light",
         "dark"
-    };
-
-    private static readonly Dictionary<string, (int Width, int Height)> PresetSizes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["github"] = (1280, 720),
-        ["social"] = (1080, 1080),
-        ["portfolio"] = (1600, 900)
     };
 
     public sealed class Settings : CommandSettings
@@ -111,9 +100,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error("Preset is required. Use --preset github, --preset social, or --preset portfolio.");
         }
 
-        if (!SupportedPresets.Contains(settings.Preset))
+        if (!Presets.TryGet(settings.Preset, out _))
         {
-            return ValidationResult.Error($"Unknown preset '{settings.Preset}'. Supported presets: github, social, portfolio.");
+            return ValidationResult.Error($"Unknown preset '{settings.Preset}'. Supported presets: {Presets.FormatSupportedNames()}.");
         }
 
         if (string.IsNullOrWhiteSpace(settings.Theme))
@@ -141,9 +130,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             Directory.CreateDirectory(outputDirectory);
         }
 
-        var preset = settings.Preset!.Trim().ToLowerInvariant();
+        Presets.TryGet(settings.Preset, out var preset);
+
         var theme = settings.Theme!.Trim().ToLowerInvariant();
-        var size = PresetSizes[preset];
 
         var table = new Table()
             .Border(TableBorder.Rounded)
@@ -153,9 +142,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 
         table.AddRow("Input path", Markup.Escape(inputPath));
         table.AddRow("Output path", Markup.Escape(outputPath));
-        table.AddRow("Selected preset", preset);
+        table.AddRow("Selected preset", preset!.Name);
         table.AddRow("Selected theme", theme);
-        table.AddRow("Final image size", $"{size.Width}x{size.Height}");
+        table.AddRow("Final image size", $"{preset.Width}x{preset.Height}");
         table.AddRow("Status", "[yellow]Renderer pending[/]");
 
         AnsiConsole.Write(new Rule("[bold]SnapForge card[/]").RuleStyle("grey"));
