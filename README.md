@@ -187,7 +187,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 
 - [ ] GitHub Actions CI
 - [ ] Example gallery with real before/after screenshots
-- [ ] Better render tests around output dimensions
+- [x] Better render tests around output dimensions
 - [ ] More polished error messages for invalid image files
 - [ ] Pack as a local/global .NET tool
 
