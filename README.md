@@ -163,6 +163,8 @@ dotnet run --project src/SnapForge.Cli -- --help
 dotnet run --project src/SnapForge.Cli -- card --help
 ```
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verification guidelines.
+
 ## Why SnapForge?
 
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
