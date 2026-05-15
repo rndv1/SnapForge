@@ -123,6 +123,8 @@ Future screenshots will live here once the example gallery is expanded.
 Raw screenshot -> SnapForge -> GitHub-ready card
 ```
 
+See [examples/README.md](examples/README.md) for copy-ready commands and naming conventions.
+
 ## Project Structure
 
 ```text
