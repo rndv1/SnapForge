@@ -123,40 +123,82 @@ public sealed class CardCommand : Command<CardCommand.Settings>
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var inputPath = Path.GetFullPath(settings.Input!);
-        var outputPath = Path.GetFullPath(settings.Output!);
+        var options = CreateOptions(settings);
 
+        try
+        {
+            AnsiConsole.MarkupLine("[grey]Rendering card...[/]");
+            var result = Renderer.RenderAsync(options, cancellationToken).GetAwaiter().GetResult();
+            WriteReport(options, result);
+
+            return 0;
+        }
+        catch (SixLabors.ImageSharp.UnknownImageFormatException)
+        {
+            WriteError("Input image format is not supported. Try a PNG, JPEG, GIF, BMP, or WebP screenshot.");
+            return 1;
+        }
+        catch (SixLabors.ImageSharp.InvalidImageContentException exception)
+        {
+            WriteError($"Input image could not be decoded: {exception.Message}");
+            return 1;
+        }
+        catch (UnauthorizedAccessException exception)
+        {
+            WriteError($"SnapForge cannot access one of the selected paths: {exception.Message}");
+            return 1;
+        }
+        catch (IOException exception)
+        {
+            WriteError($"SnapForge could not read or write a file: {exception.Message}");
+            return 1;
+        }
+    }
+
+    private static CardOptions CreateOptions(Settings settings)
+    {
         Presets.TryGet(settings.Preset, out var preset);
         Themes.TryGet(settings.Theme, out var theme);
 
-        var options = new CardOptions(
-            InputPath: inputPath,
-            OutputPath: outputPath,
+        return new CardOptions(
+            InputPath: Path.GetFullPath(settings.Input!),
+            OutputPath: Path.GetFullPath(settings.Output!),
             Title: settings.Title!.Trim(),
             Subtitle: settings.Subtitle!.Trim(),
             Preset: preset!,
             Theme: theme!);
+    }
 
-        AnsiConsole.MarkupLine("[grey]Rendering card...[/]");
-        var result = Renderer.RenderAsync(options, cancellationToken).GetAwaiter().GetResult();
-
+    private static void WriteReport(CardOptions options, RenderResult result)
+    {
         var table = new Table()
             .Border(TableBorder.Rounded)
             .BorderColor(Color.Grey)
             .AddColumn(new TableColumn("[grey]Field[/]"))
             .AddColumn(new TableColumn("[grey]Value[/]"));
 
-        table.AddRow("Input path", Markup.Escape(inputPath));
-        table.AddRow("Output path", Markup.Escape(outputPath));
-        table.AddRow("Selected preset", preset!.Name);
-        table.AddRow("Selected theme", theme!.Name);
+        table.AddRow("Input path", Markup.Escape(options.InputPath));
+        table.AddRow("Output path", Markup.Escape(options.OutputPath));
+        table.AddRow("Selected preset", options.Preset.Name);
+        table.AddRow("Selected theme", options.Theme.Name);
         table.AddRow("Final image size", $"{result.Width}x{result.Height}");
         table.AddRow("Status", "[green]Generated[/]");
 
         AnsiConsole.Write(new Rule("[bold]SnapForge card[/]").RuleStyle("grey"));
         AnsiConsole.Write(table);
-        AnsiConsole.MarkupLine($"[grey]PNG written: {Markup.Escape(result.OutputPath)} ({result.FileSizeBytes:N0} bytes)[/]");
+        AnsiConsole.MarkupLine($"[grey]PNG written: {Markup.Escape(result.OutputPath)} ({FormatBytes(result.FileSizeBytes)})[/]");
+    }
 
-        return 0;
+    private static void WriteError(string message)
+    {
+        AnsiConsole.MarkupLine("[red]SnapForge could not generate the card.[/]");
+        AnsiConsole.MarkupLine($"[grey]{Markup.Escape(message)}[/]");
+    }
+
+    private static string FormatBytes(long bytes)
+    {
+        return bytes < 1024
+            ? $"{bytes:N0} bytes"
+            : $"{bytes / 1024d:N1} KB";
     }
 }
