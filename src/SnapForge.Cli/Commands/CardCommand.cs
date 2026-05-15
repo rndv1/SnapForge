@@ -1,4 +1,8 @@
 using System.ComponentModel;
+using SnapForge.Cli.Models;
+using SnapForge.Cli.Presets;
+using SnapForge.Cli.Rendering;
+using SnapForge.Cli.Themes;
 using SnapForge.Cli.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,25 +11,11 @@ namespace SnapForge.Cli.Commands;
 
 public sealed class CardCommand : Command<CardCommand.Settings>
 {
-    private static readonly HashSet<string> SupportedPresets = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "github",
-        "social",
-        "portfolio"
-    };
+    private static readonly PresetRegistry Presets = new(BuiltInPresets.All);
 
-    private static readonly HashSet<string> SupportedThemes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "light",
-        "dark"
-    };
+    private static readonly ThemeRegistry Themes = new(BuiltInThemes.All);
 
-    private static readonly Dictionary<string, (int Width, int Height)> PresetSizes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ["github"] = (1280, 720),
-        ["social"] = (1080, 1080),
-        ["portfolio"] = (1600, 900)
-    };
+    private static readonly CardRenderer Renderer = new();
 
     public sealed class Settings : CommandSettings
     {
@@ -86,7 +76,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error("Output path must include a PNG file name, not just a directory.");
         }
 
-        if (!string.Equals(Path.GetExtension(outputPath), ".png", StringComparison.OrdinalIgnoreCase))
+        if (!ImageFormatResolver.IsPngPath(outputPath))
         {
             return ValidationResult.Error("Output file must use the .png extension.");
         }
@@ -111,9 +101,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error("Preset is required. Use --preset github, --preset social, or --preset portfolio.");
         }
 
-        if (!SupportedPresets.Contains(settings.Preset))
+        if (!Presets.TryGet(settings.Preset, out _))
         {
-            return ValidationResult.Error($"Unknown preset '{settings.Preset}'. Supported presets: github, social, portfolio.");
+            return ValidationResult.Error($"Unknown preset '{settings.Preset}'. Supported presets: {Presets.FormatSupportedNames()}.");
         }
 
         if (string.IsNullOrWhiteSpace(settings.Theme))
@@ -121,9 +111,9 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error("Theme is required. Use --theme light or --theme dark.");
         }
 
-        if (!SupportedThemes.Contains(settings.Theme))
+        if (!Themes.TryGet(settings.Theme, out _))
         {
-            return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: light, dark.");
+            return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: {Themes.FormatSupportedNames()}.");
         }
 
         return ValidationResult.Success();
@@ -135,15 +125,20 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 
         var inputPath = Path.GetFullPath(settings.Input!);
         var outputPath = Path.GetFullPath(settings.Output!);
-        var outputDirectory = Path.GetDirectoryName(outputPath);
-        if (!string.IsNullOrWhiteSpace(outputDirectory))
-        {
-            Directory.CreateDirectory(outputDirectory);
-        }
 
-        var preset = settings.Preset!.Trim().ToLowerInvariant();
-        var theme = settings.Theme!.Trim().ToLowerInvariant();
-        var size = PresetSizes[preset];
+        Presets.TryGet(settings.Preset, out var preset);
+        Themes.TryGet(settings.Theme, out var theme);
+
+        var options = new CardOptions(
+            InputPath: inputPath,
+            OutputPath: outputPath,
+            Title: settings.Title!.Trim(),
+            Subtitle: settings.Subtitle!.Trim(),
+            Preset: preset!,
+            Theme: theme!);
+
+        AnsiConsole.MarkupLine("[grey]Rendering card...[/]");
+        var result = Renderer.RenderAsync(options, cancellationToken).GetAwaiter().GetResult();
 
         var table = new Table()
             .Border(TableBorder.Rounded)
@@ -153,14 +148,14 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 
         table.AddRow("Input path", Markup.Escape(inputPath));
         table.AddRow("Output path", Markup.Escape(outputPath));
-        table.AddRow("Selected preset", preset);
-        table.AddRow("Selected theme", theme);
-        table.AddRow("Final image size", $"{size.Width}x{size.Height}");
-        table.AddRow("Status", "[yellow]Renderer pending[/]");
+        table.AddRow("Selected preset", preset!.Name);
+        table.AddRow("Selected theme", theme!.Name);
+        table.AddRow("Final image size", $"{result.Width}x{result.Height}");
+        table.AddRow("Status", "[green]Generated[/]");
 
         AnsiConsole.Write(new Rule("[bold]SnapForge card[/]").RuleStyle("grey"));
         AnsiConsole.Write(table);
-        AnsiConsole.MarkupLine("[grey]The ImageSharp rendering pipeline will be added in PR #4.[/]");
+        AnsiConsole.MarkupLine($"[grey]PNG written: {Markup.Escape(result.OutputPath)} ({result.FileSizeBytes:N0} bytes)[/]");
 
         return 0;
     }
