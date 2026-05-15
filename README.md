@@ -2,14 +2,82 @@
 
 Turn plain screenshots into beautiful GitHub-ready cards.
 
-SnapForge is a C#/.NET CLI project for generating clean, professional image cards from ordinary screenshots. It is designed for developers who want quick visuals for GitHub READMEs, portfolios, changelogs, social posts, and project presentations.
+SnapForge is a small C#/.NET CLI that turns ordinary screenshots into polished PNG cards for GitHub READMEs, portfolios, changelogs, social posts, and project presentations.
 
-> Status: early project setup. The CLI and rendering pipeline will be implemented across focused feature branches.
+## The Problem
 
-## Planned Usage
+Project screenshots are useful, but raw screenshots often look unfinished when dropped directly into a README or release note. They can have inconsistent dimensions, no context, awkward cropping, and no visual treatment around the actual interface.
+
+Developers should not need a design tool just to make a clean project card.
+
+## The Solution
+
+SnapForge takes a source screenshot, wraps it in a minimal themed layout, and exports a ready-to-use PNG card with:
+
+- a clean background;
+- title and subtitle text;
+- a framed screenshot;
+- rounded screenshot corners;
+- a soft screenshot shadow;
+- a subtle border;
+- a small `Generated with SnapForge` attribution.
+
+The goal is not to replace design software. The goal is to make the common case fast, consistent, and pleasant.
+
+## Quick Start
+
+Requirements:
+
+- .NET 8 SDK
+- A PNG/JPG screenshot to use as input
+
+Clone and run locally:
 
 ```bash
-snapforge card ./examples/input/api-screen.png \
+git clone https://github.com/rndv1/SnapForge.git
+cd SnapForge
+dotnet restore
+dotnet build
+```
+
+Generate a card:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
+  --output ./examples/output/sample-card.png \
+  --title "SnapForge" \
+  --subtitle "GitHub-ready screenshots" \
+  --preset github \
+  --theme dark
+```
+
+Windows PowerShell:
+
+```powershell
+dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
+  --output .\examples\output\sample-card.png `
+  --title "SnapForge" `
+  --subtitle "GitHub-ready screenshots" `
+  --preset github `
+  --theme dark
+```
+
+## CLI
+
+```bash
+snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme>
+```
+
+During local development, use:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme>
+```
+
+Example:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
   --output ./examples/output/api-card.png \
   --title "GrowthOS API" \
   --subtitle "ASP.NET Core / PostgreSQL / Docker" \
@@ -17,13 +85,45 @@ snapforge card ./examples/input/api-screen.png \
   --theme dark
 ```
 
-## MVP Scope
+## Presets
 
-- Generate PNG cards from screenshots.
-- Support `github`, `social`, and `portfolio` presets.
-- Support `light` and `dark` themes.
-- Render title, subtitle, screenshot frame, soft shadow, border, and attribution.
-- Provide clear console output and understandable errors.
+| Preset | Size | Best for |
+| --- | ---: | --- |
+| `github` | `1280x720` | README banners, changelog images, project previews |
+| `social` | `1080x1080` | Square social posts and profile updates |
+| `portfolio` | `1600x900` | Portfolio case studies and presentation slides |
+
+## Themes
+
+| Theme | Style |
+| --- | --- |
+| `light` | Soft neutral background, dark text, clean product feel |
+| `dark` | GitHub-inspired dark background, light text, subtle contrast |
+
+## Features
+
+- Generates PNG cards from local screenshots.
+- Validates the input file path before rendering.
+- Creates the output directory when needed.
+- Prevents overwriting the original source screenshot.
+- Supports `github`, `social`, and `portfolio` presets.
+- Supports `light` and `dark` themes.
+- Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
+- Prints a structured console report with input, output, preset, theme, size, and status.
+
+## Before And After
+
+Future screenshots will live here once the example gallery is expanded.
+
+| Before | After |
+| --- | --- |
+| `examples/input/sample.png` | `examples/output/sample-card.png` |
+
+```text
+Raw screenshot -> SnapForge -> GitHub-ready card
+```
+
+See [examples/README.md](examples/README.md) for copy-ready commands and naming conventions.
 
 ## Project Structure
 
@@ -31,6 +131,13 @@ snapforge card ./examples/input/api-screen.png \
 SnapForge/
 ├── src/
 │   └── SnapForge.Cli/
+│       ├── Program.cs
+│       ├── Commands/
+│       ├── Models/
+│       ├── Presets/
+│       ├── Rendering/
+│       ├── Themes/
+│       └── Utils/
 ├── tests/
 │   └── SnapForge.Tests/
 ├── examples/
@@ -49,6 +156,61 @@ dotnet build
 dotnet test
 ```
 
+Run the CLI from source:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- --help
+dotnet run --project src/SnapForge.Cli -- card --help
+```
+
+## Why SnapForge?
+
+SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
+
+The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
+
+## Roadmap
+
+### MVP
+
+- [x] Console application on .NET 8
+- [x] `card` command
+- [x] `github`, `social`, and `portfolio` presets
+- [x] `light` and `dark` themes
+- [x] PNG export
+- [x] Rounded screenshot corners, frame, border, and shadow
+- [x] Unit tests for preset and theme registries
+
+### Next
+
+- [ ] GitHub Actions CI
+- [ ] Example gallery with real before/after screenshots
+- [ ] Better render tests around output dimensions
+- [ ] More polished error messages for invalid image files
+- [ ] Pack as a local/global .NET tool
+
+### Later
+
+- [ ] Custom background colors
+- [ ] Optional card padding controls
+- [ ] Additional presets for Open Graph and presentation slides
+- [ ] JSON config files for repeatable project branding
+- [ ] Batch mode for generating multiple cards
+
+## Made With C# And .NET
+
+SnapForge is built with:
+
+- .NET 8
+- C#
+- Spectre.Console
+- Spectre.Console.Cli
+- SixLabors.ImageSharp
+- SixLabors.ImageSharp.Drawing
+- xUnit
+
+It is designed as a practical open-source .NET CLI project: simple architecture, clear responsibilities, and enough tests to keep the core behavior honest.
+
 ## License
 
-SnapForge is licensed under the MIT License.
+SnapForge is licensed under the MIT License. See [LICENSE](LICENSE).
