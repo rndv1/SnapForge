@@ -169,6 +169,34 @@ SnapForge is intentionally small and focused. It is for developers who want a re
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
 
+## Roadmap
+
+### MVP
+
+- [x] Console application on .NET 8
+- [x] `card` command
+- [x] `github`, `social`, and `portfolio` presets
+- [x] `light` and `dark` themes
+- [x] PNG export
+- [x] Rounded screenshot corners, frame, border, and shadow
+- [x] Unit tests for preset and theme registries
+
+### Next
+
+- [ ] GitHub Actions CI
+- [ ] Example gallery with real before/after screenshots
+- [ ] Better render tests around output dimensions
+- [ ] More polished error messages for invalid image files
+- [ ] Pack as a local/global .NET tool
+
+### Later
+
+- [ ] Custom background colors
+- [ ] Optional card padding controls
+- [ ] Additional presets for Open Graph and presentation slides
+- [ ] JSON config files for repeatable project branding
+- [ ] Batch mode for generating multiple cards
+
 ## Made With C# And .NET
 
 SnapForge is built with:
