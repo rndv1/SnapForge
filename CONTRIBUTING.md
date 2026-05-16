@@ -24,6 +24,23 @@ For the same command shape used by CI:
 ```bash
 dotnet build --no-restore --configuration Release
 dotnet test --no-build --configuration Release --verbosity normal
+dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --no-build --configuration Release --output artifacts/packages
+```
+
+## Local Tool Packaging
+
+To test SnapForge as an installed CLI tool:
+
+```bash
+dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
+dotnet tool install --global SnapForge --add-source ./artifacts/packages
+snapforge --help
+```
+
+If you already have the tool installed, uninstall it before reinstalling from a fresh package:
+
+```bash
+dotnet tool uninstall --global SnapForge
 ```
 
 ## Branches
