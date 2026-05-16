@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest an improvement or new SnapForge capability.
+title: "Feature: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Keep the scope focused and describe the workflow it would support.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow or limitation does this feature address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should SnapForge do?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example command or output
+      description: Optional command shape, output format, or visual example.
+      render: shell
+    validations:
+      required: false
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - CLI
+        - Rendering
+        - Presets
+        - Themes
+        - Documentation
+        - Packaging
+        - Other
+    validations:
+      required: true

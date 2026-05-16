@@ -1,0 +1,52 @@
+name: Bug report
+description: Report something that is not working as expected.
+title: "Bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a SnapForge bug. Please include enough detail to reproduce the issue.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and the behavior you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: Paste the exact command you ran.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: dotnet-version
+    attributes:
+      label: .NET SDK version
+      description: Run `dotnet --version`.
+      placeholder: "8.0.x"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Output or logs
+      description: Paste relevant console output.
+      render: text
+    validations:
+      required: false
