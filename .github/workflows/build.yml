@@ -30,3 +30,6 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --configuration Release --verbosity normal
+
+      - name: Pack CLI tool
+        run: dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --no-build --configuration Release --output artifacts/packages
