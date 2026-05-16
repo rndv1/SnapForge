@@ -62,6 +62,32 @@ dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
   --theme dark
 ```
 
+## Install As A .NET Tool
+
+SnapForge can be packed and installed locally as a .NET tool:
+
+```bash
+dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
+dotnet tool install --global SnapForge --add-source ./artifacts/packages
+```
+
+Then run it with the tool command:
+
+```bash
+snapforge card ./examples/input/sample.png \
+  --output ./examples/output/sample-card.png \
+  --title "SnapForge" \
+  --subtitle "GitHub-ready screenshots" \
+  --preset github \
+  --theme dark
+```
+
+To uninstall the local tool:
+
+```bash
+dotnet tool uninstall --global SnapForge
+```
+
 ## CLI
 
 ```bash
@@ -185,11 +211,11 @@ The first version keeps the surface area narrow: one command, three presets, two
 
 ### Next
 
-- [ ] GitHub Actions CI
+- [x] GitHub Actions CI
 - [ ] Example gallery with real before/after screenshots
 - [x] Better render tests around output dimensions
-- [ ] More polished error messages for invalid image files
-- [ ] Pack as a local/global .NET tool
+- [x] More polished error messages for invalid image files
+- [x] Pack as a local/global .NET tool
 
 ### Later
 
