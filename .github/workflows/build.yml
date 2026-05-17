@@ -33,3 +33,11 @@ jobs:
 
       - name: Pack CLI tool
         run: dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --no-build --configuration Release --output artifacts/packages
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapforge-cli-package
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
+          retention-days: 7

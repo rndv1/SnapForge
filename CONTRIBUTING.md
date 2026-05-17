@@ -43,6 +43,13 @@ If you already have the tool installed, uninstall it before reinstalling from a 
 dotnet tool uninstall --global SnapForge
 ```
 
+## CI Package Artifacts
+
+The `Build` workflow packs the CLI tool on every pull request and push to `main`.
+The generated `.nupkg` is uploaded as the `snapforge-cli-package` workflow artifact.
+
+Use this artifact to verify tool installation from a branch without publishing anything to NuGet. Official package publishing can be added later as a separate release workflow.
+
 ## Branches
 
 Use short feature branches:
