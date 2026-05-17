@@ -75,6 +75,7 @@ Keep commits readable. A small series of clear commits is better than one large 
 
 - Keep reusable rendering, models, presets, themes, and utilities in `SnapForge.Core`.
 - Keep `SnapForge.Cli` focused on command parsing, validation, console output, and tool packaging.
+- Keep `SnapForge.Web` focused on local browser workflows that reuse `SnapForge.Core`.
 - Prefer simple code over framework-heavy architecture.
 - Do not add external images, logos, or protected assets.
 - Keep user-facing errors understandable and actionable.
@@ -94,6 +95,16 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 ```
 
 Review the output image before opening the PR.
+
+## Web GUI Changes
+
+When changing the web interface, run the app locally and verify the upload, preview, and download flow:
+
+```bash
+dotnet run --project src/SnapForge.Web
+```
+
+Keep the first screen focused on the generator itself. Avoid marketing-style landing pages for this project.
 
 ## License
 

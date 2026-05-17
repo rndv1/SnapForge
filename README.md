@@ -111,6 +111,16 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
   --theme dark
 ```
 
+## Web GUI
+
+SnapForge also includes a small ASP.NET Core Razor Pages interface for generating cards in the browser:
+
+```bash
+dotnet run --project src/SnapForge.Web
+```
+
+Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset and theme, then download the generated PNG.
+
 ## Presets
 
 | Preset | Size | Best for |
@@ -136,6 +146,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
 - Supports `light` and `dark` themes.
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
 - Prints a structured console report with input, output, preset, theme, size, and status.
+- Provides a local Web GUI for browser-based generation.
 
 ## Before And After
 
@@ -176,9 +187,12 @@ SnapForge/
 │   │   ├── Rendering/
 │   │   ├── Themes/
 │   │   └── Utils/
-│   └── SnapForge.Cli/
-│       ├── Program.cs
-│       └── Commands/
+│   ├── SnapForge.Cli/
+│   │   ├── Program.cs
+│   │   └── Commands/
+│   └── SnapForge.Web/
+│       ├── Pages/
+│       └── wwwroot/
 ├── tests/
 │   └── SnapForge.Tests/
 ├── examples/
@@ -202,6 +216,12 @@ Run the CLI from source:
 ```bash
 dotnet run --project src/SnapForge.Cli -- --help
 dotnet run --project src/SnapForge.Cli -- card --help
+```
+
+Run the Web GUI from source:
+
+```bash
+dotnet run --project src/SnapForge.Web
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verification guidelines.
@@ -232,10 +252,12 @@ The first version keeps the surface area narrow: one command, three presets, two
 - [x] More polished error messages for invalid image files
 - [x] Pack as a local/global .NET tool
 - [x] Extract reusable rendering core for future UI surfaces
-- [ ] Web GUI for generating cards in the browser
+- [x] Web GUI for generating cards in the browser
 
 ### Later
 
+- [ ] Drag-and-drop uploads in the Web GUI
+- [ ] Web GUI render history for the current session
 - [ ] Custom background colors
 - [ ] Optional card padding controls
 - [ ] Additional presets for Open Graph and presentation slides
