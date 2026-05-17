@@ -7,6 +7,13 @@ updates:
       day: "monday"
       time: "09:00"
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "SixLabors.ImageSharp"
+        update-types:
+          - "version-update:semver-major"
+      - dependency-name: "SixLabors.ImageSharp.Drawing"
+        update-types:
+          - "version-update:semver-major"
     groups:
       dotnet-dependencies:
         patterns:
