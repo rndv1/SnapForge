@@ -139,15 +139,29 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
 
 ## Before And After
 
-Future screenshots will live here once the example gallery is expanded.
+The repository includes a small sample screenshot and generated cards so you can see the visual treatment before running the CLI locally.
 
-| Before | After |
-| --- | --- |
-| `examples/input/sample.png` | `examples/output/sample-card.png` |
+<table>
+  <tr>
+    <th>Input screenshot</th>
+    <th>GitHub dark card</th>
+  </tr>
+  <tr>
+    <td><img src="examples/input/sample.png" alt="Raw SnapForge sample screenshot" width="360"></td>
+    <td><img src="examples/output/sample-github-dark.png" alt="Generated SnapForge GitHub dark card" width="420"></td>
+  </tr>
+</table>
 
-```text
-Raw screenshot -> SnapForge -> GitHub-ready card
-```
+<table>
+  <tr>
+    <th>Social light card</th>
+    <th>Portfolio dark card</th>
+  </tr>
+  <tr>
+    <td><img src="examples/output/sample-social-light.png" alt="Generated SnapForge social light card" width="320"></td>
+    <td><img src="examples/output/sample-portfolio-dark.png" alt="Generated SnapForge portfolio dark card" width="420"></td>
+  </tr>
+</table>
 
 See [examples/README.md](examples/README.md) for copy-ready commands and naming conventions.
 
@@ -212,7 +226,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 ### Next
 
 - [x] GitHub Actions CI
-- [ ] Example gallery with real before/after screenshots
+- [x] Example gallery with real before/after screenshots
 - [x] Better render tests around output dimensions
 - [x] More polished error messages for invalid image files
 - [x] Pack as a local/global .NET tool

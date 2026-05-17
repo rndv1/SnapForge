@@ -35,3 +35,6 @@ Thumbs.db
 # SnapForge generated examples
 examples/output/*
 !examples/output/.gitkeep
+!examples/output/sample-github-dark.png
+!examples/output/sample-social-light.png
+!examples/output/sample-portfolio-dark.png
