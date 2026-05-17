@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\SnapForge.Cli\SnapForge.Cli.csproj" />
+    <ProjectReference Include="..\..\src\SnapForge.Core\SnapForge.Core.csproj" />
   </ItemGroup>
 
 </Project>

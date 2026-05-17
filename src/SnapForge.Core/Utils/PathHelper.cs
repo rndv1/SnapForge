@@ -1,4 +1,4 @@
-namespace SnapForge.Cli.Utils;
+namespace SnapForge.Core.Utils;
 
 public static class PathHelper
 {

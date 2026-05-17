@@ -1,4 +1,4 @@
-using SnapForge.Cli.Presets;
+using SnapForge.Core.Presets;
 
 namespace SnapForge.Tests.Presets;
 

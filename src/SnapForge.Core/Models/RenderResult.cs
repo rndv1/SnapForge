@@ -1,4 +1,4 @@
-namespace SnapForge.Cli.Models;
+namespace SnapForge.Core.Models;
 
 public sealed record RenderResult(
     string OutputPath,

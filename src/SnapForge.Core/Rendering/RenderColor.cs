@@ -1,7 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SnapForge.Cli.Rendering;
+namespace SnapForge.Core.Rendering;
 
 internal static class RenderColor
 {

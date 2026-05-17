@@ -1,4 +1,4 @@
-namespace SnapForge.Cli.Themes;
+namespace SnapForge.Core.Themes;
 
 public static class BuiltInThemes
 {

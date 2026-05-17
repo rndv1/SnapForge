@@ -1,9 +1,9 @@
-using SnapForge.Cli.Models;
-using SnapForge.Cli.Presets;
-using SnapForge.Cli.Rendering;
-using SnapForge.Cli.Themes;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SnapForge.Core.Models;
+using SnapForge.Core.Presets;
+using SnapForge.Core.Rendering;
+using SnapForge.Core.Themes;
 
 namespace SnapForge.Tests.Rendering;
 

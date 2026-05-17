@@ -1,9 +1,9 @@
 using System.ComponentModel;
-using SnapForge.Cli.Models;
-using SnapForge.Cli.Presets;
-using SnapForge.Cli.Rendering;
-using SnapForge.Cli.Themes;
-using SnapForge.Cli.Utils;
+using SnapForge.Core.Models;
+using SnapForge.Core.Presets;
+using SnapForge.Core.Rendering;
+using SnapForge.Core.Themes;
+using SnapForge.Core.Utils;
 using Spectre.Console;
 using Spectre.Console.Cli;
 

@@ -1,9 +1,9 @@
-using SnapForge.Cli.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using SnapForge.Core.Models;
 
-namespace SnapForge.Cli.Rendering;
+namespace SnapForge.Core.Rendering;
 
 public sealed class ScreenshotRenderer
 {

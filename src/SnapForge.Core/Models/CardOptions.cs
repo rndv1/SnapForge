@@ -1,7 +1,7 @@
-using SnapForge.Cli.Presets;
-using SnapForge.Cli.Themes;
+using SnapForge.Core.Presets;
+using SnapForge.Core.Themes;
 
-namespace SnapForge.Cli.Models;
+namespace SnapForge.Core.Models;
 
 public sealed record CardOptions(
     string InputPath,

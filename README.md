@@ -170,14 +170,15 @@ See [examples/README.md](examples/README.md) for copy-ready commands and naming 
 ```text
 SnapForge/
 ├── src/
+│   ├── SnapForge.Core/
+│   │   ├── Models/
+│   │   ├── Presets/
+│   │   ├── Rendering/
+│   │   ├── Themes/
+│   │   └── Utils/
 │   └── SnapForge.Cli/
 │       ├── Program.cs
-│       ├── Commands/
-│       ├── Models/
-│       ├── Presets/
-│       ├── Rendering/
-│       ├── Themes/
-│       └── Utils/
+│       └── Commands/
 ├── tests/
 │   └── SnapForge.Tests/
 ├── examples/
@@ -230,6 +231,8 @@ The first version keeps the surface area narrow: one command, three presets, two
 - [x] Better render tests around output dimensions
 - [x] More polished error messages for invalid image files
 - [x] Pack as a local/global .NET tool
+- [x] Extract reusable rendering core for future UI surfaces
+- [ ] Web GUI for generating cards in the browser
 
 ### Later
 

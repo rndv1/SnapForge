@@ -73,7 +73,8 @@ Keep commits readable. A small series of clear commits is better than one large 
 
 ## Code Style
 
-- Keep responsibilities separated across commands, models, registries, rendering, themes, presets, and utils.
+- Keep reusable rendering, models, presets, themes, and utilities in `SnapForge.Core`.
+- Keep `SnapForge.Cli` focused on command parsing, validation, console output, and tool packaging.
 - Prefer simple code over framework-heavy architecture.
 - Do not add external images, logos, or protected assets.
 - Keep user-facing errors understandable and actionable.
