@@ -1,6 +1,6 @@
-using SnapForge.Core.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SnapForge.Core.Models;
 
 namespace SnapForge.Core.Rendering;
 
