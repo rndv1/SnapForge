@@ -1,4 +1,4 @@
-namespace SnapForge.Cli.Rendering;
+namespace SnapForge.Core.Rendering;
 
 public sealed record CardLayout(
     int Margin,

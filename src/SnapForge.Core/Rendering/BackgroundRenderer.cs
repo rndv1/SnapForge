@@ -1,8 +1,8 @@
-using SnapForge.Cli.Models;
+using SnapForge.Core.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace SnapForge.Cli.Rendering;
+namespace SnapForge.Core.Rendering;
 
 public sealed class BackgroundRenderer
 {

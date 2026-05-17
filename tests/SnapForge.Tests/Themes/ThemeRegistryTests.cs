@@ -1,4 +1,4 @@
-using SnapForge.Cli.Themes;
+using SnapForge.Core.Themes;
 
 namespace SnapForge.Tests.Themes;
 

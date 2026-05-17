@@ -1,4 +1,4 @@
-namespace SnapForge.Cli.Presets;
+namespace SnapForge.Core.Presets;
 
 public static class BuiltInPresets
 {
