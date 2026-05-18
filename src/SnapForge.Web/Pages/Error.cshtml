@@ -1,0 +1,15 @@
+@page
+@model ErrorModel
+
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="app-shell">
+    <main class="error-view">
+        <span class="product-label">SnapForge Web</span>
+        <h1>Something went wrong</h1>
+        <p>The generator could not complete the request.</p>
+        <a class="repo-link" asp-page="/Index">Back to generator</a>
+    </main>
+</div>

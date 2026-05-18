@@ -1,0 +1,104 @@
+@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Web Generator";
+}
+
+<div class="app-shell">
+    <header class="topbar">
+        <div>
+            <span class="product-label">SnapForge Web</span>
+            <h1>Generate a card</h1>
+        </div>
+        <a class="repo-link" href="https://github.com/rndv1/SnapForge">GitHub</a>
+    </header>
+
+    <main class="workspace">
+        <section class="tool-panel" aria-labelledby="card-form-title">
+            <div class="panel-heading">
+                <h2 id="card-form-title">Card settings</h2>
+                <span>@Model.SelectedPresetSize</span>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="card-form">
+                @Html.AntiForgeryToken()
+
+                <div class="field">
+                    <label asp-for="Input.Screenshot">Screenshot</label>
+                    <input asp-for="Input.Screenshot" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" />
+                </div>
+
+                <div class="field">
+                    <label asp-for="Input.Title">Title</label>
+                    <input asp-for="Input.Title" autocomplete="off" />
+                </div>
+
+                <div class="field">
+                    <label asp-for="Input.Subtitle">Subtitle</label>
+                    <input asp-for="Input.Subtitle" autocomplete="off" />
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label asp-for="Input.Preset">Preset</label>
+                        <select asp-for="Input.Preset" asp-items="Model.PresetOptions"></select>
+                    </div>
+
+                    <div class="field">
+                        <label asp-for="Input.Theme">Theme</label>
+                        <select asp-for="Input.Theme" asp-items="Model.ThemeOptions"></select>
+                    </div>
+                </div>
+
+                <button type="submit">Generate PNG</button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+            {
+                <p class="notice error" role="alert">@Model.ErrorMessage</p>
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+            {
+                <p class="notice success">@Model.SuccessMessage</p>
+            }
+        </section>
+
+        <section class="preview-panel" aria-labelledby="preview-title">
+            <div class="preview-heading">
+                <div>
+                    <span class="product-label">Preview</span>
+                    <h2 id="preview-title">@Model.PreviewTitle</h2>
+                </div>
+
+                @if (Model.Result is not null)
+                {
+                    <a class="download-link" href="@Model.ResultDataUrl" download="snapforge-card.png">Download PNG</a>
+                }
+            </div>
+
+            <div class="preview-stage">
+                <img src="@Model.PreviewImageSource" alt="@Model.PreviewImageAlt" />
+            </div>
+
+            <dl class="metadata">
+                <div>
+                    <dt>Preset</dt>
+                    <dd>@Model.DisplayPreset</dd>
+                </div>
+                <div>
+                    <dt>Theme</dt>
+                    <dd>@Model.DisplayTheme</dd>
+                </div>
+                <div>
+                    <dt>Size</dt>
+                    <dd>@Model.DisplaySize</dd>
+                </div>
+                <div>
+                    <dt>File</dt>
+                    <dd>@Model.DisplayFileSize</dd>
+                </div>
+            </dl>
+        </section>
+    </main>
+</div>
