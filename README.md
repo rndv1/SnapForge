@@ -147,6 +147,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
 - Prints a structured console report with input, output, preset, theme, size, and status.
 - Provides a local Web GUI for browser-based generation.
+- Supports drag-and-drop uploads in the Web GUI.
 
 ## Before And After
 
@@ -256,7 +257,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 
 ### Later
 
-- [ ] Drag-and-drop uploads in the Web GUI
+- [x] Drag-and-drop uploads in the Web GUI
 - [ ] Web GUI render history for the current session
 - [ ] Custom background colors
 - [ ] Optional card padding controls
