@@ -35,7 +35,7 @@ jobs:
         run: dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --no-build --configuration Release --output artifacts/packages
 
       - name: Upload package artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: snapforge-cli-package
           path: artifacts/packages/*.nupkg
