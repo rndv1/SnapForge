@@ -26,7 +26,20 @@
 
                 <div class="field">
                     <label asp-for="Input.Screenshot">Screenshot</label>
-                    <input asp-for="Input.Screenshot" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" />
+                    <div class="dropzone" data-dropzone>
+                        <input
+                            asp-for="Input.Screenshot"
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp,image/gif,image/bmp"
+                            class="file-input"
+                            data-file-input
+                            aria-describedby="screenshot-file-state" />
+                        <div class="dropzone-copy">
+                            <strong>Drop screenshot</strong>
+                            <span id="screenshot-file-state" data-file-name>No file selected</span>
+                        </div>
+                        <span class="file-action">Browse</span>
+                    </div>
                 </div>
 
                 <div class="field">
