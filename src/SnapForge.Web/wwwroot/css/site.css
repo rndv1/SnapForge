@@ -184,6 +184,71 @@ input[type="file"] {
   padding: 10px;
 }
 
+.dropzone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 92px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  background: #fbfcfe;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.dropzone.is-dragging {
+  border-color: var(--accent);
+  background: #edf4ff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
+}
+
+.dropzone.has-file {
+  border-style: solid;
+}
+
+.file-input {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  min-height: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.dropzone-copy {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.dropzone-copy strong {
+  font-size: 0.96rem;
+}
+
+.dropzone-copy span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.86rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-action {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
 input:focus,
 select:focus {
   outline: 3px solid rgba(37, 99, 235, 0.18);
