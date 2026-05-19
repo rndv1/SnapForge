@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,8 +8,6 @@ using SnapForge.Core.Models;
 using SnapForge.Core.Presets;
 using SnapForge.Core.Rendering;
 using SnapForge.Core.Themes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace SnapForge.Web.Pages;
 
