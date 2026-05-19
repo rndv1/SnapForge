@@ -6,12 +6,20 @@ using SnapForge.Core.Models;
 using SnapForge.Core.Presets;
 using SnapForge.Core.Rendering;
 using SnapForge.Core.Themes;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SnapForge.Web.Pages;
 
 public sealed class IndexModel : PageModel
 {
+    private const int MaxHistoryItems = 5;
+
     private const long MaxUploadBytes = 15 * 1024 * 1024;
+
+    private const string HistorySessionKey = "SnapForge.Web.History";
+
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     private static readonly HashSet<string> SupportedInputExtensions = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -33,6 +41,8 @@ public sealed class IndexModel : PageModel
     public CardFormInput Input { get; set; } = CardFormInput.Default();
 
     public GeneratedCard? Result { get; private set; }
+
+    public IReadOnlyList<GeneratedCard> History { get; private set; } = [];
 
     public string? ErrorMessage { get; private set; }
 
@@ -75,7 +85,7 @@ public sealed class IndexModel : PageModel
 
     public string? ResultDataUrl => Result is null
         ? null
-        : $"data:image/png;base64,{Result.Base64Png}";
+        : Result.DataUrl;
 
     public string DisplayPreset => Result?.PresetName ?? Input.Preset;
 
@@ -92,11 +102,13 @@ public sealed class IndexModel : PageModel
     public void OnGet()
     {
         Input = CardFormInput.Default();
+        History = ReadHistory();
     }
 
     public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
     {
         Input.Normalize();
+        History = ReadHistory();
 
         var validationError = ValidateInput(out var preset, out var theme);
         if (validationError is not null)
@@ -132,12 +144,15 @@ public sealed class IndexModel : PageModel
 
             Result = new GeneratedCard(
                 Base64Png: Convert.ToBase64String(pngBytes),
+                Title: Input.Title,
                 Width: renderResult.Width,
                 Height: renderResult.Height,
                 FileSizeBytes: renderResult.FileSizeBytes,
                 PresetName: preset!.Name,
-                ThemeName: theme!.Name);
+                ThemeName: theme!.Name,
+                CreatedAtUtc: DateTimeOffset.UtcNow);
 
+            History = StoreHistory(Result);
             SuccessMessage = "PNG generated.";
         }
         catch (UnknownImageFormatException)
@@ -162,6 +177,39 @@ public sealed class IndexModel : PageModel
         }
 
         return Page();
+    }
+
+    private IReadOnlyList<GeneratedCard> ReadHistory()
+    {
+        var json = HttpContext.Session.GetString(HistorySessionKey);
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return [];
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<IReadOnlyList<GeneratedCard>>(json, JsonOptions) ?? [];
+        }
+        catch (JsonException)
+        {
+            return [];
+        }
+    }
+
+    private IReadOnlyList<GeneratedCard> StoreHistory(GeneratedCard card)
+    {
+        var history = ReadHistory();
+        var updatedHistory = history
+            .Prepend(card)
+            .Take(MaxHistoryItems)
+            .ToArray();
+
+        HttpContext.Session.SetString(
+            HistorySessionKey,
+            JsonSerializer.Serialize(updatedHistory, JsonOptions));
+
+        return updatedHistory;
     }
 
     private string? ValidateInput(out Preset? preset, out Theme? theme)
@@ -267,8 +315,23 @@ public sealed class CardFormInput
 
 public sealed record GeneratedCard(
     string Base64Png,
+    string Title,
     int Width,
     int Height,
     long FileSizeBytes,
     string PresetName,
-    string ThemeName);
+    string ThemeName,
+    DateTimeOffset CreatedAtUtc)
+{
+    [JsonIgnore]
+    public string DataUrl => $"data:image/png;base64,{Base64Png}";
+
+    [JsonIgnore]
+    public string DownloadFileName => $"snapforge-card-{CreatedAtUtc:yyyyMMdd-HHmmss}.png";
+
+    [JsonIgnore]
+    public string SizeLabel => $"{Width}x{Height}";
+
+    [JsonIgnore]
+    public string CreatedAtLabel => CreatedAtUtc.ToLocalTime().ToString("HH:mm");
+}
