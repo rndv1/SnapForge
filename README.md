@@ -148,6 +148,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Prints a structured console report with input, output, preset, theme, size, and status.
 - Provides a local Web GUI for browser-based generation.
 - Supports drag-and-drop uploads in the Web GUI.
+- Keeps recent generated cards available in the current Web GUI session.
 
 ## Before And After
 
@@ -258,7 +259,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 ### Later
 
 - [x] Drag-and-drop uploads in the Web GUI
-- [ ] Web GUI render history for the current session
+- [x] Web GUI render history for the current session
 - [ ] Custom background colors
 - [ ] Optional card padding controls
 - [ ] Additional presets for Open Graph and presentation slides

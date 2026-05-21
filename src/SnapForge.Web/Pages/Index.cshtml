@@ -112,6 +112,29 @@
                     <dd>@Model.DisplayFileSize</dd>
                 </div>
             </dl>
+
+            @if (Model.History.Count > 0)
+            {
+                <section class="history-panel" aria-labelledby="history-title">
+                    <div class="history-heading">
+                        <h2 id="history-title">Session history</h2>
+                        <span>@Model.History.Count</span>
+                    </div>
+
+                    <ol class="history-list">
+                        @foreach (var item in Model.History)
+                        {
+                            <li>
+                                <div class="history-copy">
+                                    <strong>@item.Title</strong>
+                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.SizeLabel</span>
+                                </div>
+                                <a class="history-download" href="@item.DataUrl" download="@item.DownloadFileName">PNG</a>
+                            </li>
+                        }
+                    </ol>
+                </section>
+            }
         </section>
     </main>
 </div>
