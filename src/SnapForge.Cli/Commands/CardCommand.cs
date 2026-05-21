@@ -42,6 +42,10 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         [CommandOption("--theme <theme>")]
         [Description("Card theme: light or dark.")]
         public string? Theme { get; set; }
+
+        [CommandOption("--background <hex>")]
+        [Description("Optional card background color as #RRGGBB.")]
+        public string? BackgroundColor { get; set; }
     }
 
     protected override ValidationResult Validate(CommandContext context, Settings settings)
@@ -116,6 +120,12 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error($"Unknown theme '{settings.Theme}'. Supported themes: {Themes.FormatSupportedNames()}.");
         }
 
+        if (!string.IsNullOrWhiteSpace(settings.BackgroundColor)
+            && !HexColor.TryNormalize(settings.BackgroundColor, out _))
+        {
+            return ValidationResult.Error($"Background color must use {HexColor.ExpectedFormat}, for example #0D1117.");
+        }
+
         return ValidationResult.Success();
     }
 
@@ -159,6 +169,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
     {
         Presets.TryGet(settings.Preset, out var preset);
         Themes.TryGet(settings.Theme, out var theme);
+        HexColor.TryNormalize(settings.BackgroundColor, out var backgroundColor);
 
         return new CardOptions(
             InputPath: Path.GetFullPath(settings.Input!),
@@ -166,7 +177,8 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             Title: settings.Title!.Trim(),
             Subtitle: settings.Subtitle!.Trim(),
             Preset: preset!,
-            Theme: theme!);
+            Theme: theme!,
+            BackgroundColor: backgroundColor);
     }
 
     private static void WriteReport(CardOptions options, RenderResult result)
@@ -181,6 +193,11 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         table.AddRow("Output path", Markup.Escape(options.OutputPath));
         table.AddRow("Selected preset", options.Preset.Name);
         table.AddRow("Selected theme", options.Theme.Name);
+        if (options.BackgroundColor is not null)
+        {
+            table.AddRow("Background color", options.BackgroundColor);
+        }
+
         table.AddRow("Final image size", $"{result.Width}x{result.Height}");
         table.AddRow("Status", "[green]Generated[/]");
 
