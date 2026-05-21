@@ -8,10 +8,13 @@ public static class BuiltInPresets
 
     public static readonly Preset Portfolio = new("portfolio", 1600, 900);
 
+    public static readonly Preset OpenGraph = new("open-graph", 1200, 630);
+
     public static IReadOnlyCollection<Preset> All { get; } =
     [
         GitHub,
         Social,
-        Portfolio
+        Portfolio,
+        OpenGraph
     ];
 }
