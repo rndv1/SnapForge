@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SnapForge.Core.Models;
+using SnapForge.Core.Utils;
 
 namespace SnapForge.Core.Rendering;
 
@@ -14,7 +15,7 @@ public sealed class CardRenderer
     {
         var width = options.Preset.Width;
         var height = options.Preset.Height;
-        var layout = CreateLayout(width, height);
+        var layout = CreateLayout(width, height, options.Padding);
 
         using var canvas = new Image<Rgba32>(width, height);
 
@@ -34,9 +35,10 @@ public sealed class CardRenderer
         return new RenderResult(options.OutputPath, width, height, outputFile.Length);
     }
 
-    private static CardLayout CreateLayout(int width, int height)
+    private static CardLayout CreateLayout(int width, int height, int? padding)
     {
-        var margin = Math.Max(48, (int)Math.Round(width * 0.075));
+        var defaultMargin = Math.Max(48, (int)Math.Round(width * 0.075));
+        var margin = Math.Min(CardPadding.Normalize(padding, defaultMargin), Math.Max(32, width / 4));
         var headerY = Math.Max(44, (int)Math.Round(height * 0.075));
         var subtitleY = headerY + Math.Clamp((int)Math.Round(height * 0.075), 46, 68);
         var screenshotY = Math.Clamp((int)Math.Round(height * 0.265), 170, 300);

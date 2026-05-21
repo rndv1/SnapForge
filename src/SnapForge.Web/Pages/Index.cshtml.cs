@@ -95,6 +95,9 @@ public sealed class IndexModel : PageModel
     public string DisplayBackground => Result?.BackgroundLabel
         ?? (Input.UseCustomBackground ? Input.BackgroundColor : "theme default");
 
+    public string DisplayPadding => Result?.PaddingLabel
+        ?? (Input.UseCustomPadding ? $"{Input.Padding}px" : "auto");
+
     public string DisplaySize => Result is null
         ? SelectedPresetSize
         : $"{Result.Width}x{Result.Height}";
@@ -114,7 +117,7 @@ public sealed class IndexModel : PageModel
         Input.Normalize();
         History = ReadHistory();
 
-        var validationError = ValidateInput(out var preset, out var theme, out var backgroundColor);
+        var validationError = ValidateInput(out var preset, out var theme, out var backgroundColor, out var padding);
         if (validationError is not null)
         {
             ErrorMessage = validationError;
@@ -142,7 +145,8 @@ public sealed class IndexModel : PageModel
                 Subtitle: Input.Subtitle,
                 Preset: preset!,
                 Theme: theme!,
-                BackgroundColor: backgroundColor);
+                BackgroundColor: backgroundColor,
+                Padding: padding);
 
             var renderResult = await renderer.RenderAsync(options, cancellationToken);
             var pngBytes = await System.IO.File.ReadAllBytesAsync(outputPath, cancellationToken);
@@ -156,7 +160,8 @@ public sealed class IndexModel : PageModel
                 PresetName: preset!.Name,
                 ThemeName: theme!.Name,
                 CreatedAtUtc: DateTimeOffset.UtcNow,
-                BackgroundColor: backgroundColor);
+                BackgroundColor: backgroundColor,
+                Padding: padding);
 
             History = StoreHistory(Result);
             SuccessMessage = "PNG generated.";
@@ -218,11 +223,12 @@ public sealed class IndexModel : PageModel
         return updatedHistory;
     }
 
-    private string? ValidateInput(out Preset? preset, out Theme? theme, out string? backgroundColor)
+    private string? ValidateInput(out Preset? preset, out Theme? theme, out string? backgroundColor, out int? padding)
     {
         preset = null;
         theme = null;
         backgroundColor = null;
+        padding = null;
 
         if (Input.Screenshot is null || Input.Screenshot.Length == 0)
         {
@@ -263,6 +269,16 @@ public sealed class IndexModel : PageModel
         if (Input.UseCustomBackground && !HexColor.TryNormalize(Input.BackgroundColor, out backgroundColor))
         {
             return $"Background color must use {HexColor.ExpectedFormat}.";
+        }
+
+        if (Input.UseCustomPadding)
+        {
+            if (!CardPadding.IsValid(Input.Padding))
+            {
+                return $"Padding must be in the supported range: {CardPadding.FormatRange()}.";
+            }
+
+            padding = Input.Padding;
         }
 
         return null;
@@ -309,6 +325,10 @@ public sealed class CardFormInput
 
     public string BackgroundColor { get; set; } = BuiltInThemes.Dark.BackgroundColor;
 
+    public bool UseCustomPadding { get; set; }
+
+    public int Padding { get; set; } = CardPadding.Default;
+
     public static CardFormInput Default()
     {
         return new CardFormInput
@@ -317,7 +337,8 @@ public sealed class CardFormInput
             Subtitle = "GitHub-ready screenshots",
             Preset = BuiltInPresets.GitHub.Name,
             Theme = BuiltInThemes.Dark.Name,
-            BackgroundColor = BuiltInThemes.Dark.BackgroundColor
+            BackgroundColor = BuiltInThemes.Dark.BackgroundColor,
+            Padding = CardPadding.Default
         };
     }
 
@@ -340,7 +361,8 @@ public sealed record GeneratedCard(
     string PresetName,
     string ThemeName,
     DateTimeOffset CreatedAtUtc,
-    string? BackgroundColor = null)
+    string? BackgroundColor = null,
+    int? Padding = null)
 {
     [JsonIgnore]
     public string DataUrl => $"data:image/png;base64,{Base64Png}";
@@ -356,4 +378,7 @@ public sealed record GeneratedCard(
 
     [JsonIgnore]
     public string BackgroundLabel => BackgroundColor ?? "theme default";
+
+    [JsonIgnore]
+    public string PaddingLabel => Padding is null ? "auto" : $"{Padding}px";
 }

@@ -64,16 +64,30 @@
                     </div>
                 </div>
 
-                <div class="color-option">
-                    <label class="checkbox-control">
-                        <input asp-for="Input.UseCustomBackground" type="checkbox" />
-                        <span>Custom background</span>
-                    </label>
+                <div class="custom-options">
+                    <div class="color-option">
+                        <label class="checkbox-control">
+                            <input asp-for="Input.UseCustomBackground" type="checkbox" />
+                            <span>Custom background</span>
+                        </label>
 
-                    <label class="color-picker">
-                        <span>Color</span>
-                        <input asp-for="Input.BackgroundColor" type="color" />
-                    </label>
+                        <label class="color-picker">
+                            <span>Color</span>
+                            <input asp-for="Input.BackgroundColor" type="color" />
+                        </label>
+                    </div>
+
+                    <div class="padding-option">
+                        <label class="checkbox-control">
+                            <input asp-for="Input.UseCustomPadding" type="checkbox" />
+                            <span>Custom padding</span>
+                        </label>
+
+                        <label class="number-picker">
+                            <span>Pixels</span>
+                            <input asp-for="Input.Padding" type="number" min="32" max="240" step="8" />
+                        </label>
+                    </div>
                 </div>
 
                 <button type="submit">Generate PNG</button>
@@ -120,6 +134,10 @@
                     <dd>@Model.DisplayBackground</dd>
                 </div>
                 <div>
+                    <dt>Padding</dt>
+                    <dd>@Model.DisplayPadding</dd>
+                </div>
+                <div>
                     <dt>Size</dt>
                     <dd>@Model.DisplaySize</dd>
                 </div>
@@ -143,7 +161,7 @@
                             <li>
                                 <div class="history-copy">
                                     <strong>@item.Title</strong>
-                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.BackgroundLabel / @item.SizeLabel</span>
+                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.BackgroundLabel / @item.PaddingLabel / @item.SizeLabel</span>
                                 </div>
                                 <a class="history-download" href="@item.DataUrl" download="@item.DownloadFileName">PNG</a>
                             </li>

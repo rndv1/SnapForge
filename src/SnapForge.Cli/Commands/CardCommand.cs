@@ -46,6 +46,10 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         [CommandOption("--background <hex>")]
         [Description("Optional card background color as #RRGGBB.")]
         public string? BackgroundColor { get; set; }
+
+        [CommandOption("--padding <pixels>")]
+        [Description("Optional card padding in pixels.")]
+        public int? Padding { get; set; }
     }
 
     protected override ValidationResult Validate(CommandContext context, Settings settings)
@@ -126,6 +130,11 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             return ValidationResult.Error($"Background color must use {HexColor.ExpectedFormat}, for example #0D1117.");
         }
 
+        if (settings.Padding is not null && !CardPadding.IsValid(settings.Padding.Value))
+        {
+            return ValidationResult.Error($"Padding must be in the supported range: {CardPadding.FormatRange()}.");
+        }
+
         return ValidationResult.Success();
     }
 
@@ -178,7 +187,8 @@ public sealed class CardCommand : Command<CardCommand.Settings>
             Subtitle: settings.Subtitle!.Trim(),
             Preset: preset!,
             Theme: theme!,
-            BackgroundColor: backgroundColor);
+            BackgroundColor: backgroundColor,
+            Padding: settings.Padding);
     }
 
     private static void WriteReport(CardOptions options, RenderResult result)
@@ -196,6 +206,11 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         if (options.BackgroundColor is not null)
         {
             table.AddRow("Background color", options.BackgroundColor);
+        }
+
+        if (options.Padding is not null)
+        {
+            table.AddRow("Card padding", $"{options.Padding}px");
         }
 
         table.AddRow("Final image size", $"{result.Width}x{result.Height}");
