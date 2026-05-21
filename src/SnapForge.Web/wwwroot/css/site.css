@@ -184,6 +184,47 @@ input[type="file"] {
   padding: 10px;
 }
 
+.color-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fbfcfe;
+}
+
+.checkbox-control,
+.color-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.checkbox-control input[type="checkbox"] {
+  width: 18px;
+  min-height: 18px;
+  accent-color: var(--accent);
+}
+
+.color-picker span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+input[type="color"] {
+  width: 44px;
+  min-height: 36px;
+  padding: 3px;
+  cursor: pointer;
+}
+
 .dropzone {
   position: relative;
   display: flex;
@@ -300,7 +341,7 @@ select:focus {
 
 .metadata {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
   margin-top: 16px;
 }
@@ -438,6 +479,10 @@ select:focus {
 
   .field-row,
   .metadata {
+    grid-template-columns: 1fr;
+  }
+
+  .color-option {
     grid-template-columns: 1fr;
   }
 
