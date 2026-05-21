@@ -48,7 +48,8 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
   --preset github \
-  --theme dark
+  --theme dark \
+  --background "#0F172A"
 ```
 
 Windows PowerShell:
@@ -59,7 +60,8 @@ dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
   --title "SnapForge" `
   --subtitle "GitHub-ready screenshots" `
   --preset github `
-  --theme dark
+  --theme dark `
+  --background "#0F172A"
 ```
 
 ## Install As A .NET Tool
@@ -79,7 +81,8 @@ snapforge card ./examples/input/sample.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
   --preset github \
-  --theme dark
+  --theme dark \
+  --background "#0F172A"
 ```
 
 To uninstall the local tool:
@@ -91,13 +94,13 @@ dotnet tool uninstall --global SnapForge
 ## CLI
 
 ```bash
-snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme>
+snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>]
 ```
 
 During local development, use:
 
 ```bash
-dotnet run --project src/SnapForge.Cli -- card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme>
+dotnet run --project src/SnapForge.Cli -- card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>]
 ```
 
 Example:
@@ -108,8 +111,11 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
   --title "GrowthOS API" \
   --subtitle "ASP.NET Core / PostgreSQL / Docker" \
   --preset github \
-  --theme dark
+  --theme dark \
+  --background "#0D1117"
 ```
+
+`--background` is optional. When it is omitted, SnapForge uses the selected theme background. Hex colors may be passed as `#RRGGBB` or `RRGGBB`.
 
 ## Web GUI
 
@@ -119,7 +125,7 @@ SnapForge also includes a small ASP.NET Core Razor Pages interface for generatin
 dotnet run --project src/SnapForge.Web
 ```
 
-Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset and theme, then download the generated PNG.
+Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset, theme, and optional custom background color, then download the generated PNG.
 
 ## Presets
 
@@ -145,8 +151,9 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Prevents overwriting the original source screenshot.
 - Supports `github`, `open-graph`, `social`, and `portfolio` presets.
 - Supports `light` and `dark` themes.
+- Supports optional custom background colors.
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
-- Prints a structured console report with input, output, preset, theme, size, and status.
+- Prints a structured console report with input, output, preset, theme, background color, size, and status.
 - Provides a local Web GUI for browser-based generation.
 - Supports drag-and-drop uploads in the Web GUI.
 - Keeps recent generated cards available in the current Web GUI session.
@@ -234,7 +241,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verificatio
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
-The current version adds a small Web GUI and an Open Graph preset while keeping the rendering model predictable.
+The current version adds a small Web GUI, an Open Graph preset, and optional custom background colors while keeping the rendering model predictable.
 
 ## Roadmap
 
@@ -263,7 +270,7 @@ The current version adds a small Web GUI and an Open Graph preset while keeping 
 
 - [x] Drag-and-drop uploads in the Web GUI
 - [x] Web GUI render history for the current session
-- [ ] Custom background colors
+- [x] Custom background colors
 - [ ] Optional card padding controls
 - [ ] Additional presets for presentation slides
 - [ ] JSON config files for repeatable project branding
