@@ -144,7 +144,7 @@ button:hover,
 
 .card-form {
   display: grid;
-  gap: 16px;
+  gap: 12px;
 }
 
 .field,
@@ -176,6 +176,7 @@ select {
 }
 
 input[type="text"],
+input[type="number"],
 select {
   padding: 0 12px;
 }
@@ -184,19 +185,26 @@ input[type="file"] {
   padding: 10px;
 }
 
-.color-option {
+.custom-options {
+  display: grid;
+  gap: 6px;
+}
+
+.color-option,
+.padding-option {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: #fbfcfe;
 }
 
 .checkbox-control,
-.color-picker {
+.color-picker,
+.number-picker {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -212,7 +220,8 @@ input[type="file"] {
   accent-color: var(--accent);
 }
 
-.color-picker span {
+.color-picker span,
+.number-picker span {
   color: var(--muted);
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -220,9 +229,14 @@ input[type="file"] {
 
 input[type="color"] {
   width: 44px;
-  min-height: 36px;
+  min-height: 32px;
   padding: 3px;
   cursor: pointer;
+}
+
+.number-picker input[type="number"] {
+  width: 88px;
+  min-height: 32px;
 }
 
 .dropzone {
@@ -231,10 +245,10 @@ input[type="color"] {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 92px;
+  min-height: 84px;
   border: 1px dashed var(--border);
   border-radius: 8px;
-  padding: 16px;
+  padding: 14px;
   background: #fbfcfe;
   transition:
     border-color 160ms ease,
@@ -341,7 +355,7 @@ select:focus {
 
 .metadata {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin-top: 16px;
 }
@@ -482,7 +496,8 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
-  .color-option {
+  .color-option,
+  .padding-option {
     grid-template-columns: 1fr;
   }
 
