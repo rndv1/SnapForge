@@ -126,6 +126,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 | Preset | Size | Best for |
 | --- | ---: | --- |
 | `github` | `1280x720` | README banners, changelog images, project previews |
+| `open-graph` | `1200x630` | Open Graph images, link previews, social cards |
 | `social` | `1080x1080` | Square social posts and profile updates |
 | `portfolio` | `1600x900` | Portfolio case studies and presentation slides |
 
@@ -142,7 +143,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Validates the input file path before rendering.
 - Creates the output directory when needed.
 - Prevents overwriting the original source screenshot.
-- Supports `github`, `social`, and `portfolio` presets.
+- Supports `github`, `open-graph`, `social`, and `portfolio` presets.
 - Supports `light` and `dark` themes.
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
 - Prints a structured console report with input, output, preset, theme, size, and status.
@@ -233,6 +234,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verificatio
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
+The current version adds a small Web GUI and an Open Graph preset while keeping the rendering model predictable.
 
 ## Roadmap
 
@@ -255,6 +257,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 - [x] Pack as a local/global .NET tool
 - [x] Extract reusable rendering core for future UI surfaces
 - [x] Web GUI for generating cards in the browser
+- [x] Open Graph preset
 
 ### Later
 
@@ -262,7 +265,7 @@ The first version keeps the surface area narrow: one command, three presets, two
 - [x] Web GUI render history for the current session
 - [ ] Custom background colors
 - [ ] Optional card padding controls
-- [ ] Additional presets for Open Graph and presentation slides
+- [ ] Additional presets for presentation slides
 - [ ] JSON config files for repeatable project branding
 - [ ] Batch mode for generating multiple cards
 
