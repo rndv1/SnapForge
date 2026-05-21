@@ -64,6 +64,18 @@
                     </div>
                 </div>
 
+                <div class="color-option">
+                    <label class="checkbox-control">
+                        <input asp-for="Input.UseCustomBackground" type="checkbox" />
+                        <span>Custom background</span>
+                    </label>
+
+                    <label class="color-picker">
+                        <span>Color</span>
+                        <input asp-for="Input.BackgroundColor" type="color" />
+                    </label>
+                </div>
+
                 <button type="submit">Generate PNG</button>
             </form>
 
@@ -104,6 +116,10 @@
                     <dd>@Model.DisplayTheme</dd>
                 </div>
                 <div>
+                    <dt>Background</dt>
+                    <dd>@Model.DisplayBackground</dd>
+                </div>
+                <div>
                     <dt>Size</dt>
                     <dd>@Model.DisplaySize</dd>
                 </div>
@@ -127,7 +143,7 @@
                             <li>
                                 <div class="history-copy">
                                     <strong>@item.Title</strong>
-                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.SizeLabel</span>
+                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.BackgroundLabel / @item.SizeLabel</span>
                                 </div>
                                 <a class="history-download" href="@item.DataUrl" download="@item.DownloadFileName">PNG</a>
                             </li>

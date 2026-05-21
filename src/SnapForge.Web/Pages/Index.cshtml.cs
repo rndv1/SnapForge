@@ -8,6 +8,7 @@ using SnapForge.Core.Models;
 using SnapForge.Core.Presets;
 using SnapForge.Core.Rendering;
 using SnapForge.Core.Themes;
+using SnapForge.Core.Utils;
 
 namespace SnapForge.Web.Pages;
 
@@ -91,6 +92,9 @@ public sealed class IndexModel : PageModel
 
     public string DisplayTheme => Result?.ThemeName ?? Input.Theme;
 
+    public string DisplayBackground => Result?.BackgroundLabel
+        ?? (Input.UseCustomBackground ? Input.BackgroundColor : "theme default");
+
     public string DisplaySize => Result is null
         ? SelectedPresetSize
         : $"{Result.Width}x{Result.Height}";
@@ -110,7 +114,7 @@ public sealed class IndexModel : PageModel
         Input.Normalize();
         History = ReadHistory();
 
-        var validationError = ValidateInput(out var preset, out var theme);
+        var validationError = ValidateInput(out var preset, out var theme, out var backgroundColor);
         if (validationError is not null)
         {
             ErrorMessage = validationError;
@@ -137,7 +141,8 @@ public sealed class IndexModel : PageModel
                 Title: Input.Title,
                 Subtitle: Input.Subtitle,
                 Preset: preset!,
-                Theme: theme!);
+                Theme: theme!,
+                BackgroundColor: backgroundColor);
 
             var renderResult = await renderer.RenderAsync(options, cancellationToken);
             var pngBytes = await System.IO.File.ReadAllBytesAsync(outputPath, cancellationToken);
@@ -150,7 +155,8 @@ public sealed class IndexModel : PageModel
                 FileSizeBytes: renderResult.FileSizeBytes,
                 PresetName: preset!.Name,
                 ThemeName: theme!.Name,
-                CreatedAtUtc: DateTimeOffset.UtcNow);
+                CreatedAtUtc: DateTimeOffset.UtcNow,
+                BackgroundColor: backgroundColor);
 
             History = StoreHistory(Result);
             SuccessMessage = "PNG generated.";
@@ -212,10 +218,11 @@ public sealed class IndexModel : PageModel
         return updatedHistory;
     }
 
-    private string? ValidateInput(out Preset? preset, out Theme? theme)
+    private string? ValidateInput(out Preset? preset, out Theme? theme, out string? backgroundColor)
     {
         preset = null;
         theme = null;
+        backgroundColor = null;
 
         if (Input.Screenshot is null || Input.Screenshot.Length == 0)
         {
@@ -251,6 +258,11 @@ public sealed class IndexModel : PageModel
         if (!Themes.TryGet(Input.Theme, out theme))
         {
             return $"Unknown theme. Supported themes: {Themes.FormatSupportedNames()}.";
+        }
+
+        if (Input.UseCustomBackground && !HexColor.TryNormalize(Input.BackgroundColor, out backgroundColor))
+        {
+            return $"Background color must use {HexColor.ExpectedFormat}.";
         }
 
         return null;
@@ -293,6 +305,10 @@ public sealed class CardFormInput
 
     public string Theme { get; set; } = BuiltInThemes.Dark.Name;
 
+    public bool UseCustomBackground { get; set; }
+
+    public string BackgroundColor { get; set; } = BuiltInThemes.Dark.BackgroundColor;
+
     public static CardFormInput Default()
     {
         return new CardFormInput
@@ -300,7 +316,8 @@ public sealed class CardFormInput
             Title = "SnapForge",
             Subtitle = "GitHub-ready screenshots",
             Preset = BuiltInPresets.GitHub.Name,
-            Theme = BuiltInThemes.Dark.Name
+            Theme = BuiltInThemes.Dark.Name,
+            BackgroundColor = BuiltInThemes.Dark.BackgroundColor
         };
     }
 
@@ -310,6 +327,7 @@ public sealed class CardFormInput
         Subtitle = Subtitle.Trim();
         Preset = Preset.Trim();
         Theme = Theme.Trim();
+        BackgroundColor = BackgroundColor.Trim();
     }
 }
 
@@ -321,7 +339,8 @@ public sealed record GeneratedCard(
     long FileSizeBytes,
     string PresetName,
     string ThemeName,
-    DateTimeOffset CreatedAtUtc)
+    DateTimeOffset CreatedAtUtc,
+    string? BackgroundColor = null)
 {
     [JsonIgnore]
     public string DataUrl => $"data:image/png;base64,{Base64Png}";
@@ -334,4 +353,7 @@ public sealed record GeneratedCard(
 
     [JsonIgnore]
     public string CreatedAtLabel => CreatedAtUtc.ToLocalTime().ToString("HH:mm");
+
+    [JsonIgnore]
+    public string BackgroundLabel => BackgroundColor ?? "theme default";
 }

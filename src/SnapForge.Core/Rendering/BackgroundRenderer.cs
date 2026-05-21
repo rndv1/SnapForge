@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SnapForge.Core.Models;
+using SnapForge.Core.Utils;
 
 namespace SnapForge.Core.Rendering;
 
@@ -8,8 +9,17 @@ public sealed class BackgroundRenderer
 {
     public void Draw(Image<Rgba32> canvas, CardOptions options, CardLayout layout)
     {
-        var top = RenderColor.ToPixel(options.Theme.BackgroundColor);
-        var bottom = RenderColor.ToPixel(options.Theme.BackgroundAccentColor);
+        var backgroundColor = options.Theme.BackgroundColor;
+        var backgroundAccentColor = options.Theme.BackgroundAccentColor;
+
+        if (options.BackgroundColor is not null && HexColor.TryNormalize(options.BackgroundColor, out var normalizedBackgroundColor))
+        {
+            backgroundColor = normalizedBackgroundColor;
+            backgroundAccentColor = normalizedBackgroundColor;
+        }
+
+        var top = RenderColor.ToPixel(backgroundColor);
+        var bottom = RenderColor.ToPixel(backgroundAccentColor);
 
         canvas.ProcessPixelRows(accessor =>
         {

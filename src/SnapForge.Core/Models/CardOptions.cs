@@ -9,4 +9,5 @@ public sealed record CardOptions(
     string Title,
     string Subtitle,
     Preset Preset,
-    Theme Theme);
+    Theme Theme,
+    string? BackgroundColor = null);
