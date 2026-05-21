@@ -38,3 +38,4 @@ examples/output/*
 !examples/output/sample-github-dark.png
 !examples/output/sample-social-light.png
 !examples/output/sample-portfolio-dark.png
+!examples/output/sample-open-graph-light.png

@@ -36,7 +36,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
         public string? Subtitle { get; set; }
 
         [CommandOption("--preset <preset>")]
-        [Description("Card preset: github, social, or portfolio.")]
+        [Description("Card preset: github, social, portfolio, or open-graph.")]
         public string? Preset { get; set; }
 
         [CommandOption("--theme <theme>")]
@@ -98,7 +98,7 @@ public sealed class CardCommand : Command<CardCommand.Settings>
 
         if (string.IsNullOrWhiteSpace(settings.Preset))
         {
-            return ValidationResult.Error("Preset is required. Use --preset github, --preset social, or --preset portfolio.");
+            return ValidationResult.Error("Preset is required. Use --preset github, --preset social, --preset portfolio, or --preset open-graph.");
         }
 
         if (!Presets.TryGet(settings.Preset, out _))
