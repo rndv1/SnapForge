@@ -37,6 +37,17 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 
 Output size: `1280x720`.
 
+Windows PowerShell:
+
+```powershell
+dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
+  --output .\examples\output\sample-github-dark.png `
+  --title "SnapForge" `
+  --subtitle "Turn plain screenshots into GitHub-ready cards" `
+  --preset github `
+  --theme dark
+```
+
 ## Social Card
 
 ```bash
