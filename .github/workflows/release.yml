@@ -131,8 +131,23 @@ jobs:
         with:
           path: artifacts/release-assets
 
+      - name: Generate checksums
+        shell: bash
+        run: |
+          cd artifacts/release-assets
+
+          find . -type f ! -name 'SHA256SUMS.txt' | sort | while read -r file; do
+            sha256sum "$file" | sed 's#  ./[^/]*/#  #'
+          done > SHA256SUMS.txt
+
       - name: Create release
-        uses: softprops/action-gh-release@v2
-        with:
-          generate_release_notes: true
-          files: artifacts/release-assets/**/*
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mapfile -t release_files < <(find artifacts/release-assets -type f | sort)
+
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            "${release_files[@]}"

@@ -1,17 +1,19 @@
-# Contributing To SnapForge
+# Участие в разработке SnapForge
 
-Thanks for considering a contribution to SnapForge.
+**Язык:** Русский | [English](CONTRIBUTING.en.md)
 
-SnapForge is intentionally small: a focused .NET CLI with clear rendering behavior, a compact set of presets, and a minimal public surface. Contributions should keep that shape intact.
+Спасибо за интерес к SnapForge.
 
-## Local Setup
+SnapForge намеренно остаётся небольшим проектом: сфокусированный .NET CLI, понятный рендеринг, компактный набор пресетов и минимальная публичная поверхность. Вклад в проект должен сохранять эту форму.
 
-Requirements:
+## Локальная подготовка
+
+Требования:
 
 - .NET 8 SDK
 - Git
 
-Run the standard checks before opening a pull request:
+Стандартные проверки перед pull request:
 
 ```bash
 dotnet restore
@@ -19,7 +21,7 @@ dotnet build
 dotnet test
 ```
 
-For the same command shape used by CI:
+Команды в форме, близкой к CI:
 
 ```bash
 dotnet build --no-restore --configuration Release
@@ -27,9 +29,7 @@ dotnet test --no-build --configuration Release --verbosity normal
 dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --no-build --configuration Release --output artifacts/packages
 ```
 
-## Local Tool Packaging
-
-To test SnapForge as an installed CLI tool:
+## Локальная упаковка как .NET tool
 
 ```bash
 dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
@@ -37,75 +37,53 @@ dotnet tool install --global SnapForge --add-source ./artifacts/packages
 snapforge --help
 ```
 
-If you already have the tool installed, uninstall it before reinstalling from a fresh package:
+Если tool уже установлен:
 
 ```bash
 dotnet tool uninstall --global SnapForge
 ```
 
-## CI Package Artifacts
+## Ветки
 
-The `Build` workflow packs the CLI tool on every pull request and push to `main`.
-The generated `.nupkg` is uploaded as the `snapforge-cli-package` workflow artifact.
-
-Use this artifact to verify tool installation from a branch without publishing anything to NuGet. Official package publishing can be added later as a separate release workflow.
-
-## Branches
-
-Use short feature branches:
+Используйте короткие feature branches:
 
 ```bash
 git checkout -b feature/my-change
 ```
 
-Prefer focused branches that can be reviewed in one sitting.
+Ветка должна быть достаточно узкой, чтобы её можно было спокойно посмотреть за один review pass.
 
-## Pull Requests
+## Pull requests
 
-Good SnapForge pull requests usually include:
+Хороший PR для SnapForge обычно содержит:
 
-- a short summary of what changed;
-- screenshots or generated output when rendering changes visually affect cards;
-- the commands used for verification;
-- tests when the change affects registry behavior, options, validation, or rendering contracts.
+- короткое описание изменений;
+- команды проверки;
+- screenshots или generated output, если меняется визуальный рендеринг;
+- тесты, если меняется поведение registry, options, validation или rendering contracts.
 
-Keep commits readable. A small series of clear commits is better than one large mixed commit.
+Коммиты лучше держать читаемыми и логичными. Несколько маленьких коммитов обычно понятнее одного смешанного.
 
-## Code Style
+## Code style
 
-- Keep reusable rendering, models, presets, themes, and utilities in `SnapForge.Core`.
-- Keep `SnapForge.Cli` focused on command parsing, validation, console output, and tool packaging.
-- Keep `SnapForge.Web` focused on local browser workflows that reuse `SnapForge.Core`.
-- Prefer simple code over framework-heavy architecture.
-- Do not add external images, logos, or protected assets.
-- Keep user-facing errors understandable and actionable.
-- Preserve the CLI-first experience: command output should be useful without being noisy.
+- Общий рендеринг, модели, пресеты, темы и утилиты держите в `SnapForge.Core`.
+- `SnapForge.Cli` должен отвечать за команды, валидацию, консольный вывод и упаковку.
+- `SnapForge.Web` должен отвечать за browser workflow и переиспользовать `SnapForge.Core`.
+- Предпочитайте простой код тяжёлой архитектуре.
+- Не добавляйте внешние изображения, логотипы или защищённые ассеты.
+- Пользовательские ошибки должны быть понятными и actionable.
+- CLI-first experience важен: вывод команды должен быть полезным, но не шумным.
 
-## Rendering Changes
+## Изменения Web GUI
 
-When changing rendering behavior, generate at least one sample card locally:
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-card.png \
-  --title "SnapForge" \
-  --subtitle "GitHub-ready screenshots" \
-  --preset github \
-  --theme dark
-```
-
-Review the output image before opening the PR.
-
-## Web GUI Changes
-
-When changing the web interface, run the app locally and verify the upload, preview, and download flow:
+При изменении web-интерфейса запустите приложение и проверьте upload, preview и download:
 
 ```bash
 dotnet run --project src/SnapForge.Web
 ```
 
-Keep the first screen focused on the generator itself. Avoid marketing-style landing pages for this project.
+Первый экран должен оставаться генератором, а не marketing landing page.
 
-## License
+## Лицензия
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+Отправляя вклад в проект, вы соглашаетесь, что он будет распространяться по лицензии MIT.

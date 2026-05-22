@@ -1,26 +1,26 @@
-## Summary
+## Кратко
 
-<!-- What changed, and why? Keep this short and concrete. -->
+<!-- Что изменилось и зачем? Держите описание коротким и конкретным. -->
 
-## Verification
+## Проверка
 
-<!-- List commands you ran. Use "Not run" with a reason when this is docs-only. -->
+<!-- Перечислите команды, которые запускали. Если не запускали, укажите причину. -->
 
 - [ ] `dotnet restore`
 - [ ] `dotnet build`
 - [ ] `dotnet test`
 
-## Screenshots
+## Скриншоты
 
-<!-- Required for rendering or documentation image changes. Remove if not applicable. -->
+<!-- Нужно для изменений рендеринга или документационных изображений. Если не применимо, удалите секцию. -->
 
-Before:
+До:
 
-After:
+После:
 
-## Checklist
+## Чеклист
 
-- [ ] The PR is focused on one change.
-- [ ] User-facing behavior is documented when needed.
-- [ ] Tests were added or updated when behavior changed.
-- [ ] Generated output files are not committed unless intentionally used as examples.
+- [ ] PR сфокусирован на одной задаче.
+- [ ] Пользовательское поведение задокументировано, если оно изменилось.
+- [ ] Тесты добавлены или обновлены, если изменилось поведение.
+- [ ] Generated output files не закоммичены, если они не нужны как документационные примеры.

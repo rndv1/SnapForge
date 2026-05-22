@@ -1,26 +1,29 @@
-# Installation
+# Установка
 
-SnapForge can be verified without building from source by downloading a prebuilt release archive.
+**Язык:** Русский | [English](en/INSTALLATION.md)
 
-## Prebuilt CLI Archives
+SnapForge можно проверить без сборки из исходников: скачайте готовый архив из GitHub Releases.
 
-Download the latest release from:
+## Готовые CLI-архивы
+
+Последний релиз:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Available release assets are created by the Release workflow:
+Release workflow публикует:
 
-| Asset | Platform |
+| Файл | Платформа |
 | --- | --- |
 | `snapforge-win-x64.zip` | Windows x64 |
 | `snapforge-linux-x64.tar.gz` | Linux x64 |
 | `snapforge-osx-x64.tar.gz` | macOS Intel |
 | `snapforge-osx-arm64.tar.gz` | macOS Apple Silicon |
-| `SnapForge.<version>.nupkg` | .NET tool package |
+| `SnapForge.<version>.nupkg` | пакет .NET tool |
+| `SHA256SUMS.txt` | SHA-256 checksums для release assets |
 
-After extracting the platform archive, run:
+После распаковки:
 
 ```bash
 snapforge --help
@@ -32,18 +35,36 @@ Windows:
 .\snapforge.exe --help
 ```
 
-## Install From Release Package
+## Проверка checksums
 
-Download the `.nupkg` from the GitHub Release, place it in a local folder, and install it as a .NET tool:
+Скачайте `SHA256SUMS.txt` из того же релиза, что и архив.
+
+Linux/macOS:
+
+```bash
+sha256sum -c SHA256SUMS.txt
+```
+
+Windows PowerShell:
+
+```powershell
+Get-FileHash .\snapforge-win-x64.zip -Algorithm SHA256
+```
+
+Сравните полученный хэш со строкой для нужного файла в `SHA256SUMS.txt`.
+
+## Установка из release package
+
+Скачайте `.nupkg` из GitHub Release, положите его в локальную папку и установите как .NET tool:
 
 ```bash
 dotnet tool install --global SnapForge --add-source ./packages
 snapforge --help
 ```
 
-## Build From Source
+## Сборка из исходников
 
-Source builds are still supported for contributors:
+Для разработки по-прежнему поддерживается локальная сборка:
 
 ```bash
 dotnet restore

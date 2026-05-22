@@ -1,103 +1,48 @@
 # SnapForge
 
+**Язык:** Русский | [English](README.en.md)
+
 Turn plain screenshots into beautiful GitHub-ready cards.
 
-SnapForge is a small C#/.NET CLI that turns ordinary screenshots into polished PNG cards for GitHub READMEs, portfolios, changelogs, social posts, and project presentations.
+SnapForge — это CLI-утилита и небольшой локальный Web GUI на C#/.NET для генерации аккуратных PNG-карточек из обычных скриншотов. Проект помогает быстро готовить изображения для GitHub README, портфолио, changelog, социальных сетей и презентаций.
 
-## The Problem
+## Проблема
 
-Project screenshots are useful, but raw screenshots often look unfinished when dropped directly into a README or release note. They can have inconsistent dimensions, no context, awkward cropping, and no visual treatment around the actual interface.
+Скриншоты полезны, но в документации они часто выглядят сыро: разные размеры, нет контекста, нет рамки, тени и визуального порядка. Открывать дизайнерский инструмент ради одной README-картинки — лишний шаг.
 
-Developers should not need a design tool just to make a clean project card.
+## Решение
 
-## The Solution
+SnapForge берёт исходный скриншот, помещает его в минималистичный тематический макет и экспортирует готовую PNG-карточку:
 
-SnapForge takes a source screenshot, wraps it in a minimal themed layout, and exports a ready-to-use PNG card with:
+- чистый фон;
+- заголовок и подзаголовок;
+- скриншот внутри рамки;
+- скруглённые углы;
+- мягкая тень;
+- тонкая граница;
+- подпись `Generated with SnapForge`.
 
-- a clean background;
-- title and subtitle text;
-- a framed screenshot;
-- rounded screenshot corners;
-- a soft screenshot shadow;
-- a subtle border;
-- a small `Generated with SnapForge` attribution.
+## Быстрый старт
 
-The goal is not to replace design software. The goal is to make the common case fast, consistent, and pleasant.
-
-## Quick Start
-
-Use SnapForge without building from source:
+SnapForge можно проверить без сборки из исходников:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Download the archive for your platform, extract it, and run:
+Скачайте архив для своей платформы, распакуйте и запустите:
 
 ```bash
 snapforge --help
 ```
 
-See [docs/INSTALLATION.md](docs/INSTALLATION.md) for release assets and installation options.
-
-Requirements for source builds:
-
-- .NET 8 SDK
-- A PNG/JPG screenshot to use as input
-
-Clone and run locally:
-
-```bash
-git clone https://github.com/rndv1/SnapForge.git
-cd SnapForge
-dotnet restore
-dotnet build
-```
-
-Generate a card:
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-card.png \
-  --title "SnapForge" \
-  --subtitle "GitHub-ready screenshots" \
-  --preset github \
-  --theme dark \
-  --background "#0F172A" \
-  --padding 112
-```
-
-Or reuse project branding from JSON:
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-card.png \
-  --config ./examples/snapforge.config.json
-```
-
-Windows PowerShell:
+Windows:
 
 ```powershell
-dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
-  --output .\examples\output\sample-card.png `
-  --title "SnapForge" `
-  --subtitle "GitHub-ready screenshots" `
-  --preset github `
-  --theme dark `
-  --background "#0F172A" `
-  --padding 112
+.\snapforge.exe --help
 ```
 
-## Install As A .NET Tool
-
-SnapForge can be packed and installed locally as a .NET tool:
-
-```bash
-dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
-dotnet tool install --global SnapForge --add-source ./artifacts/packages
-```
-
-Then run it with the tool command:
+Сгенерировать карточку:
 
 ```bash
 snapforge card ./examples/input/sample.png \
@@ -105,225 +50,105 @@ snapforge card ./examples/input/sample.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
   --preset github \
-  --theme dark \
-  --background "#0F172A" \
-  --padding 112
+  --theme dark
 ```
 
-To uninstall the local tool:
+Запуск из исходников:
 
 ```bash
-dotnet tool uninstall --global SnapForge
+dotnet restore
+dotnet build
+dotnet test
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
+  --output ./examples/output/sample-card.png \
+  --title "SnapForge" \
+  --subtitle "GitHub-ready screenshots" \
+  --preset github \
+  --theme dark
 ```
 
 ## CLI
 
 ```bash
-snapforge card [input] --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
+snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
+snapforge batch <config> [--stop-on-error]
 ```
 
-During local development, use:
+`--background` принимает цвет в формате `#RRGGBB` или `RRGGBB`.
 
-```bash
-dotnet run --project src/SnapForge.Cli -- card [input] --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
-```
+`--padding` задаёт внешний отступ карточки от `32` до `240` пикселей.
 
-Example:
+`--config` позволяет хранить повторяемые настройки проекта в JSON.
 
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
-  --output ./examples/output/api-card.png \
-  --title "GrowthOS API" \
-  --subtitle "ASP.NET Core / PostgreSQL / Docker" \
-  --preset github \
-  --theme dark \
-  --background "#0D1117" \
-  --padding 128
-```
+## Пресеты
 
-`--background` is optional. When it is omitted, SnapForge uses the selected theme background. Hex colors may be passed as `#RRGGBB` or `RRGGBB`.
-`--padding` is optional. When it is omitted, SnapForge uses automatic preset-aware spacing. Supported values are `32` through `240` pixels.
-`--config` is optional. CLI values override values from the config file.
-
-## JSON Config Files
-
-Use a config file to keep repeatable project branding in one place:
-
-```json
-{
-  "title": "SnapForge",
-  "subtitle": "GitHub-ready screenshots",
-  "preset": "github",
-  "theme": "dark",
-  "background": "#0F172A",
-  "padding": 112
-}
-```
-
-Then render with:
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-card.png \
-  --config ./examples/snapforge.config.json
-```
-
-Config files may set `input`, `output`, `title`, `subtitle`, `preset`, `theme`, `background`, and `padding`. Relative `input` and `output` paths in config files are resolved from the config file directory.
-
-## Batch Mode
-
-Use `batch` to generate multiple cards from one JSON file:
-
-```bash
-dotnet run --project src/SnapForge.Cli -- batch ./examples/snapforge.batch.json
-```
-
-Batch files use shared defaults plus per-card overrides:
-
-```json
-{
-  "defaults": {
-    "input": "./input/sample.png",
-    "title": "SnapForge",
-    "subtitle": "Batch-generated screenshot cards",
-    "preset": "github",
-    "theme": "dark"
-  },
-  "cards": [
-    {
-      "output": "./output/batch-github-dark.png"
-    },
-    {
-      "output": "./output/batch-open-graph-light.png",
-      "preset": "open-graph",
-      "theme": "light"
-    }
-  ]
-}
-```
-
-By default, batch mode keeps rendering after a failed card and exits with code `1` if any card fails. Use `--stop-on-error` to stop after the first failure.
-
-## Web GUI
-
-SnapForge also includes a small ASP.NET Core Razor Pages interface for generating cards in the browser:
-
-```bash
-dotnet run --project src/SnapForge.Web
-```
-
-Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset, theme, optional custom background color, and optional padding, then download the generated PNG.
-
-## Presets
-
-| Preset | Size | Best for |
+| Пресет | Размер | Для чего |
 | --- | ---: | --- |
-| `github` | `1280x720` | README banners, changelog images, project previews |
-| `open-graph` | `1200x630` | Open Graph images, link previews, social cards |
-| `social` | `1080x1080` | Square social posts and profile updates |
-| `portfolio` | `1600x900` | Portfolio case studies and presentation slides |
-| `slide` | `1920x1080` | 16:9 presentation slides and high-resolution decks |
-| `slide-4-3` | `1600x1200` | Classic 4:3 presentation slides |
+| `github` | `1280x720` | README, changelog, превью проекта |
+| `open-graph` | `1200x630` | Open Graph и link preview |
+| `social` | `1080x1080` | квадратные social-карточки |
+| `portfolio` | `1600x900` | портфолио и case study |
+| `slide` | `1920x1080` | слайды 16:9 |
+| `slide-4-3` | `1600x1200` | слайды 4:3 |
 
-## Themes
+## Темы
 
-| Theme | Style |
+| Тема | Стиль |
 | --- | --- |
-| `light` | Soft neutral background, dark text, clean product feel |
-| `dark` | GitHub-inspired dark background, light text, subtle contrast |
+| `light` | светлый нейтральный фон и тёмный читаемый текст |
+| `dark` | тёмный GitHub/dev-tool стиль и светлый текст |
 
-## Features
+## Возможности
 
-- Generates PNG cards from local screenshots.
-- Validates the input file path before rendering.
-- Creates the output directory when needed.
-- Prevents overwriting the original source screenshot.
-- Supports `github`, `open-graph`, `social`, `portfolio`, `slide`, and `slide-4-3` presets.
-- Supports `light` and `dark` themes.
-- Supports optional custom background colors.
-- Supports optional card padding controls.
-- Supports JSON config files for repeatable project branding.
-- Supports batch mode for generating multiple cards from one JSON file.
-- Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
-- Prints a structured console report with input, output, config, preset, theme, background color, padding, size, and status.
-- Provides a local Web GUI for browser-based generation.
-- Supports drag-and-drop uploads in the Web GUI.
-- Keeps recent generated cards available in the current Web GUI session.
+- Генерация PNG-карточек из локальных скриншотов.
+- Проверка входного файла и создание выходной директории.
+- Защита от перезаписи исходного изображения.
+- Пресеты, темы, пользовательский фон и настройка отступов.
+- JSON-конфиги для повторяемого брендинга проекта.
+- Batch mode для генерации нескольких карточек за один запуск.
+- Локальный Web GUI на ASP.NET Core Razor Pages.
+- GitHub Actions CI и release workflow.
+- Готовые release-архивы для Windows, Linux и macOS.
+- `.nupkg` для установки как .NET tool.
+- `SHA256SUMS.txt` для проверки целостности release assets.
 
-## Before And After
+## До и после
 
-The repository includes a small sample screenshot and generated cards so you can see the visual treatment before running the CLI locally.
+| Исходный скриншот | Готовая карточка |
+| --- | --- |
+| <img src="examples/input/sample.png" alt="Исходный пример SnapForge" width="360"> | <img src="examples/output/sample-github-dark.png" alt="Сгенерированная GitHub-карточка SnapForge" width="420"> |
 
-<table>
-  <tr>
-    <th>Input screenshot</th>
-    <th>GitHub dark card</th>
-  </tr>
-  <tr>
-    <td><img src="examples/input/sample.png" alt="Raw SnapForge sample screenshot" width="360"></td>
-    <td><img src="examples/output/sample-github-dark.png" alt="Generated SnapForge GitHub dark card" width="420"></td>
-  </tr>
-</table>
+Больше примеров: [examples/README.md](examples/README.md).
 
-<table>
-  <tr>
-    <th>Social light card</th>
-    <th>Portfolio dark card</th>
-  </tr>
-  <tr>
-    <td><img src="examples/output/sample-social-light.png" alt="Generated SnapForge social light card" width="320"></td>
-    <td><img src="examples/output/sample-portfolio-dark.png" alt="Generated SnapForge portfolio dark card" width="420"></td>
-  </tr>
-</table>
+## Документация
 
-<table>
-  <tr>
-    <th>Presentation slide card</th>
-  </tr>
-  <tr>
-    <td><img src="examples/output/sample-slide-dark.png" alt="Generated SnapForge presentation slide card" width="520"></td>
-  </tr>
-</table>
+- [Установка](docs/INSTALLATION.md)
+- [Руководство пользователя](docs/USER_GUIDE.md)
+- [Руководство разработчика](docs/DEVELOPER_GUIDE.md)
+- [Чеклист проверяющего](docs/REVIEWER_CHECKLIST.md)
+- [Участие в разработке](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
-See [examples/README.md](examples/README.md) for copy-ready commands and naming conventions.
+Английские версии доступны через переключатель языка в начале каждого документа.
 
-## Project Structure
+## Структура проекта
 
 ```text
 SnapForge/
 ├── src/
 │   ├── SnapForge.Core/
-│   │   ├── Configuration/
-│   │   ├── Models/
-│   │   ├── Presets/
-│   │   ├── Rendering/
-│   │   ├── Themes/
-│   │   └── Utils/
 │   ├── SnapForge.Cli/
-│   │   ├── Program.cs
-│   │   └── Commands/
 │   └── SnapForge.Web/
-│       ├── Pages/
-│       └── wwwroot/
 ├── tests/
-│   └── SnapForge.Tests/
 ├── examples/
-│   ├── snapforge.config.json
-│   ├── snapforge.batch.json
-│   ├── input/
-│   └── output/
 ├── docs/
-│   ├── USER_GUIDE.md
-│   ├── DEVELOPER_GUIDE.md
-│   ├── INSTALLATION.md
-│   └── REVIEWER_CHECKLIST.md
-├── CHANGELOG.md
+├── .github/workflows/
 ├── README.md
-├── LICENSE
+├── README.en.md
 └── SnapForge.sln
 ```
 
-## Development
+## Разработка
 
 ```bash
 dotnet restore
@@ -331,76 +156,41 @@ dotnet build
 dotnet test
 ```
 
-Run the CLI from source:
+Запуск CLI:
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- --help
 dotnet run --project src/SnapForge.Cli -- card --help
 ```
 
-Run the Web GUI from source:
+Запуск Web GUI:
 
 ```bash
 dotnet run --project src/SnapForge.Web
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verification guidelines.
-See [docs/USER_GUIDE.md](docs/USER_GUIDE.md), [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md), and [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md) for complete usage, development, and review documentation.
-
 ## Why SnapForge?
 
-SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
-
-The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
-The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, optional card padding controls, JSON config files, and batch mode while keeping the rendering model predictable.
+SnapForge намеренно маленький и сфокусированный. Он нужен разработчикам, которым нужен быстрый и воспроизводимый способ делать аккуратные визуалы проекта без ручной работы в редакторе дизайна.
 
 ## Roadmap
 
-### MVP
-
-- [x] Console application on .NET 8
-- [x] `card` command
-- [x] `github`, `social`, and `portfolio` presets
-- [x] `light` and `dark` themes
+- [x] CLI-команда `card`
+- [x] темы `light` и `dark`
+- [x] пресеты `github`, `social`, `portfolio`, `open-graph`, `slide`, `slide-4-3`
 - [x] PNG export
-- [x] Rounded screenshot corners, frame, border, and shadow
-- [x] Unit tests for preset and theme registries
-
-### Next
-
-- [x] GitHub Actions CI
-- [x] Example gallery with real before/after screenshots
-- [x] Better render tests around output dimensions
-- [x] More polished error messages for invalid image files
-- [x] Pack as a local/global .NET tool
-- [x] Extract reusable rendering core for future UI surfaces
-- [x] Web GUI for generating cards in the browser
-- [x] Open Graph preset
-
-### Later
-
-- [x] Drag-and-drop uploads in the Web GUI
-- [x] Web GUI render history for the current session
-- [x] Custom background colors
-- [x] Optional card padding controls
-- [x] Additional presets for presentation slides
-- [x] JSON config files for repeatable project branding
-- [x] Batch mode for generating multiple cards
+- [x] JSON config files
+- [x] batch mode
+- [x] локальный Web GUI
+- [x] CI и release assets
+- [x] checksums для release assets
+- [ ] публикация в NuGet
+- [ ] дополнительные layout templates
 
 ## Made With C# And .NET
 
-SnapForge is built with:
+SnapForge построен на .NET 8, C#, Spectre.Console, Spectre.Console.Cli, SixLabors.ImageSharp, SixLabors.ImageSharp.Drawing, ASP.NET Core Razor Pages и xUnit.
 
-- .NET 8
-- C#
-- Spectre.Console
-- Spectre.Console.Cli
-- SixLabors.ImageSharp
-- SixLabors.ImageSharp.Drawing
-- xUnit
+## Лицензия
 
-It is designed as a practical open-source .NET CLI project: simple architecture, clear responsibilities, and enough tests to keep the core behavior honest.
-
-## License
-
-SnapForge is licensed under the MIT License. See [LICENSE](LICENSE).
+SnapForge распространяется по лицензии MIT. См. [LICENSE](LICENSE).

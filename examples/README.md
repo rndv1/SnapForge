@@ -1,6 +1,8 @@
-# SnapForge Examples
+# Примеры SnapForge
 
-This directory is for local input screenshots and generated output cards.
+**Язык:** Русский | [English](README.en.md)
+
+Эта папка содержит локальные входные скриншоты и сгенерированные карточки.
 
 ```text
 examples/
@@ -16,19 +18,13 @@ examples/
     └── sample-slide-dark.png
 ```
 
-`examples/output` is ignored by Git except for `.gitkeep` and the documented sample cards in this gallery. Other generated cards stay local by default.
+`examples/output` игнорируется Git, кроме `.gitkeep` и документированных sample cards. Остальные generated cards остаются локальными по умолчанию.
 
-## Prepare An Input Screenshot
+## Подготовить входной скриншот
 
-Place a screenshot in `examples/input`. For example:
+Положите скриншот в `examples/input`. Рекомендуемый формат — PNG.
 
-```text
-examples/input/sample.png
-```
-
-SnapForge accepts image files that ImageSharp can read. PNG screenshots are the recommended input format.
-
-## GitHub README Card
+## Карточка для GitHub README
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -39,7 +35,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --theme dark
 ```
 
-Output size: `1280x720`.
+Размер результата: `1280x720`.
 
 Windows PowerShell:
 
@@ -52,7 +48,9 @@ dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
   --theme dark
 ```
 
-## Social Card
+## Другие пресеты
+
+Social card:
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -63,9 +61,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --theme light
 ```
 
-Output size: `1080x1080`.
-
-## Portfolio Card
+Portfolio card:
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -76,40 +72,9 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --theme dark
 ```
 
-Output size: `1600x900`.
+Для link previews используйте `open-graph`, для презентаций — `slide` или `slide-4-3`.
 
-## Open Graph Card
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-open-graph-light.png \
-  --title "SnapForge" \
-  --subtitle "Open Graph-ready screenshot cards" \
-  --preset open-graph \
-  --theme light
-```
-
-Output size: `1200x630`.
-
-## Presentation Slide Card
-
-```bash
-dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
-  --output ./examples/output/sample-slide-dark.png \
-  --title "SnapForge" \
-  --subtitle "Presentation-ready screenshot cards" \
-  --preset slide \
-  --theme dark \
-  --padding 140
-```
-
-Output size: `1920x1080`.
-
-For classic 4:3 slides, use `--preset slide-4-3`. Output size: `1600x1200`.
-
-## Custom Background Color
-
-Use `--background` when a card needs to match a project, changelog, or release visual system:
+## Пользовательский фон
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -121,11 +86,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --background "#0F172A"
 ```
 
-The color accepts `#RRGGBB` or `RRGGBB`. Generated custom examples are intentionally kept local unless they are added to the documented gallery.
-
-## Custom Padding
-
-Use `--padding` to tighten or loosen the outer card spacing while keeping the selected preset size:
+## Пользовательский padding
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -137,24 +98,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --padding 140
 ```
 
-Supported padding values are `32` through `240` pixels.
-
-## Config-Driven Card
-
-Use `snapforge.config.json` to keep repeatable project branding in one place:
-
-```json
-{
-  "title": "SnapForge",
-  "subtitle": "GitHub-ready screenshots",
-  "preset": "github",
-  "theme": "dark",
-  "background": "#0F172A",
-  "padding": 112
-}
-```
-
-Then render with the config:
+## Config-driven card
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -162,66 +106,16 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --config ./examples/snapforge.config.json
 ```
 
-Command-line values override config values, so a shared branding file can still be reused with a different `--title`, `--preset`, or `--theme`.
-
-## Batch Cards
-
-Use `snapforge.batch.json` to generate multiple cards in one run:
+## Batch cards
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- batch ./examples/snapforge.batch.json
 ```
 
-The file uses shared defaults plus per-card overrides:
+Batch mode продолжает обработку после ошибки отдельной карточки и возвращает ненулевой код, если хотя бы одна карточка не сгенерировалась. Используйте `--stop-on-error`, если CI должен остановиться на первой ошибке.
 
-```json
-{
-  "defaults": {
-    "input": "./input/sample.png",
-    "title": "SnapForge",
-    "subtitle": "Batch-generated screenshot cards",
-    "preset": "github",
-    "theme": "dark",
-    "background": "#0F172A",
-    "padding": 112
-  },
-  "cards": [
-    {
-      "output": "./output/batch-github-dark.png"
-    },
-    {
-      "output": "./output/batch-open-graph-light.png",
-      "preset": "open-graph",
-      "theme": "light"
-    }
-  ]
-}
-```
-
-Batch mode keeps rendering after failed cards by default and exits with a non-zero status when any card fails. Use `--stop-on-error` when CI should stop at the first failed render.
-
-## Before And After Gallery
-
-The sample input screenshot is a synthetic interface created for this repository. The output cards below are generated by SnapForge using the commands in this file.
+## Галерея
 
 | Input | Output |
 | --- | --- |
 | <img src="input/sample.png" alt="Raw sample screenshot" width="360"> | <img src="output/sample-github-dark.png" alt="Generated GitHub dark card" width="420"> |
-
-| Preset | Theme | Output |
-| --- | --- | --- |
-| `github` | `dark` | `output/sample-github-dark.png` |
-| `social` | `light` | `output/sample-social-light.png` |
-| `portfolio` | `dark` | `output/sample-portfolio-dark.png` |
-| `open-graph` | `light` | `output/sample-open-graph-light.png` |
-| `slide` | `dark` | `output/sample-slide-dark.png` |
-
-## Notes
-
-- Keep input screenshots small enough to review comfortably in pull requests.
-- Do not add generated output images unless they are intentionally part of documentation.
-- Use descriptive output names such as `sample-github-dark.png` or `api-card-light.png`.
-- Use `--background` for project-specific cards instead of adding separate one-off themes.
-- Use `--padding` when the source screenshot needs more breathing room or a tighter crop in the same preset.
-- Use `--config` for project-level defaults that should stay consistent across README, changelog, and slide exports.
-- Use `batch` when a release or documentation update needs several card formats at once.
