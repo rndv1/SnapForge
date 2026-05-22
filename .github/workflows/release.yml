@@ -226,6 +226,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           mapfile -t release_files < <(find artifacts/release-assets -type f | sort)
 
