@@ -164,6 +164,21 @@ button:hover,
   padding: 22px;
 }
 
+.tool-panel {
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.tool-panel.is-dragging {
+  border-color: var(--accent);
+  box-shadow:
+    var(--shadow),
+    0 0 0 4px rgba(37, 99, 235, 0.16);
+  transform: translateY(-1px);
+}
+
 .panel-heading {
   margin-bottom: 20px;
 }
@@ -298,6 +313,12 @@ input[type="color"] {
   border-style: solid;
 }
 
+.dropzone.is-invalid {
+  border-color: var(--danger);
+  background: #fff0ed;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+}
+
 .file-input {
   position: absolute;
   inset: 0;
@@ -334,6 +355,12 @@ input[type="color"] {
   color: var(--text);
   font-size: 0.86rem;
   font-weight: 800;
+}
+
+.field-hint {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
 }
 
 input:focus,
