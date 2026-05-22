@@ -1,24 +1,26 @@
-# SnapForge User Guide
+# Руководство пользователя SnapForge
 
-SnapForge turns screenshots into polished PNG cards for READMEs, changelogs, social posts, portfolios, and slide decks.
+**Язык:** Русский | [English](en/USER_GUIDE.md)
 
-## Install
+SnapForge превращает скриншоты в аккуратные PNG-карточки для README, changelog, социальных сетей, портфолио и презентаций.
 
-For the easiest verification path, download a prebuilt CLI archive from GitHub Releases:
+## Установка
+
+Самый простой способ проверки — скачать готовый CLI-архив из GitHub Releases:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Choose the archive for your platform, extract it, and run:
+Выберите архив для своей платформы, распакуйте и запустите:
 
 ```bash
 snapforge --help
 ```
 
-On Windows, the executable is `snapforge.exe`.
+На Windows исполняемый файл называется `snapforge.exe`.
 
-## Generate One Card
+## Генерация одной карточки
 
 ```bash
 snapforge card ./examples/input/sample.png \
@@ -40,21 +42,21 @@ snapforge card .\examples\input\sample.png `
   --theme dark
 ```
 
-## Options
+## Опции
 
-| Option | Description |
+| Опция | Описание |
 | --- | --- |
-| `<input>` | Source screenshot path. |
-| `--output` | Output PNG path. |
-| `--title` | Card title. |
-| `--subtitle` | Card subtitle. |
-| `--preset` | `github`, `open-graph`, `social`, `portfolio`, `slide`, or `slide-4-3`. |
-| `--theme` | `light` or `dark`. |
-| `--background` | Optional custom background color, such as `#0F172A`. |
-| `--padding` | Optional card padding from `32` through `240` pixels. |
-| `--config` | Optional JSON config file. CLI options override config values. |
+| `<input>` | путь к исходному скриншоту |
+| `--output` | путь к выходному PNG |
+| `--title` | заголовок карточки |
+| `--subtitle` | подзаголовок карточки |
+| `--preset` | `github`, `open-graph`, `social`, `portfolio`, `slide` или `slide-4-3` |
+| `--theme` | `light` или `dark` |
+| `--background` | необязательный цвет фона, например `#0F172A` |
+| `--padding` | необязательный внешний отступ от `32` до `240` пикселей |
+| `--config` | необязательный JSON-конфиг; CLI-значения переопределяют конфиг |
 
-## JSON Config
+## JSON config
 
 ```json
 {
@@ -67,7 +69,7 @@ snapforge card .\examples\input\sample.png `
 }
 ```
 
-Run:
+Запуск с конфигом:
 
 ```bash
 snapforge card ./examples/input/sample.png \
@@ -75,22 +77,24 @@ snapforge card ./examples/input/sample.png \
   --config ./examples/snapforge.config.json
 ```
 
-## Batch Mode
+Относительные пути `input` и `output` внутри конфига считаются относительно файла конфига.
 
-Batch mode generates several cards from one file:
+## Batch mode
+
+Batch mode генерирует несколько карточек из одного JSON-файла:
 
 ```bash
 snapforge batch ./examples/snapforge.batch.json
 ```
 
-Use `--stop-on-error` when a CI job should stop after the first failed card.
+По умолчанию SnapForge продолжает обработку после ошибки отдельной карточки и завершает процесс с кодом `1`, если была хотя бы одна ошибка. Используйте `--stop-on-error`, если CI должен остановиться на первой ошибке.
 
 ## Web GUI
 
-SnapForge also includes a local web interface:
+SnapForge также содержит локальный web-интерфейс:
 
 ```bash
 dotnet run --project src/SnapForge.Web
 ```
 
-Open the URL printed by ASP.NET Core, upload a screenshot, choose card settings, and download the generated PNG.
+Откройте URL, который выведет ASP.NET Core, загрузите скриншот, выберите настройки карточки и скачайте готовый PNG.

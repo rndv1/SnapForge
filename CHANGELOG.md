@@ -1,19 +1,33 @@
 # Changelog
 
-## 0.1.0
+**Язык:** Русский | [English](CHANGELOG.en.md)
 
-Initial SnapForge release.
+## Unreleased
 
 ### Added
 
-- CLI command for generating screenshot cards.
-- PNG rendering with ImageSharp.
-- Light and dark themes.
-- Built-in presets for GitHub, Open Graph, social posts, portfolio cards, and presentation slides.
-- Custom background colors.
-- Optional card padding controls.
+- Генерация `SHA256SUMS.txt` для release assets.
+- Русская документация как основной вариант.
+- Английские варианты документации с переключателями языка.
+
+### Changed
+
+- Создание GitHub Release теперь выполняется через GitHub CLI вместо стороннего release action.
+
+## 0.1.0
+
+Первый релиз SnapForge.
+
+### Added
+
+- CLI-команда для генерации screenshot cards.
+- PNG rendering через ImageSharp.
+- Темы `light` и `dark`.
+- Встроенные пресеты для GitHub, Open Graph, social posts, portfolio cards и presentation slides.
+- Пользовательские цвета фона.
+- Настройка padding.
 - JSON config files.
 - Batch mode.
-- Local Web GUI.
+- Локальный Web GUI.
 - GitHub Actions CI.
-- Release workflow for prebuilt CLI archives and .NET tool packages.
+- Release workflow для готовых CLI-архивов и .NET tool package.

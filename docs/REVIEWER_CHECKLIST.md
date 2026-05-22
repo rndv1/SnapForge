@@ -1,53 +1,53 @@
-# Reviewer Checklist
+# Чеклист проверяющего
 
-This file maps SnapForge to the required repository deliverables.
+**Язык:** Русский | [English](en/REVIEWER_CHECKLIST.md)
 
-## Source Code
+Этот файл показывает, где в SnapForge находятся обязательные артефакты проекта.
 
-Product source code is in:
+## Исходный код продукта
+
+Код продукта:
 
 - `src/SnapForge.Core`
 - `src/SnapForge.Cli`
 - `src/SnapForge.Web`
 
-Tests are in:
+Тесты:
 
 - `tests/SnapForge.Tests`
 
-## User Documentation
-
-User-facing documentation is available in:
+## Документация пользователя
 
 - `README.md`
+- `README.en.md`
 - `docs/USER_GUIDE.md`
 - `docs/INSTALLATION.md`
 - `examples/README.md`
 
-## Developer Documentation
-
-Developer documentation is available in:
+## Документация разработчика
 
 - `CONTRIBUTING.md`
 - `docs/DEVELOPER_GUIDE.md`
 
-## Installer Or Site Link
+## Установочник или ссылка на сайт
 
-Reviewers can verify SnapForge without building from source by downloading release assets from:
+SnapForge можно проверить без сборки из исходников через GitHub Releases:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-The release workflow creates:
+Release workflow создаёт:
 
-- Windows CLI archive
-- Linux CLI archive
-- macOS CLI archives
-- .NET tool package
+- Windows CLI archive;
+- Linux CLI archive;
+- macOS CLI archives;
+- .NET tool package;
+- `SHA256SUMS.txt` для проверки целостности файлов.
 
-## Quick Verification Command
+## Быстрая проверка
 
-After extracting a release archive:
+После распаковки release archive:
 
 ```bash
 snapforge --help

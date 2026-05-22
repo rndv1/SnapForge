@@ -1,27 +1,29 @@
-# SnapForge Developer Guide
+# Руководство разработчика SnapForge
 
-This guide explains how the repository is organized and how to work on SnapForge safely.
+**Язык:** Русский | [English](en/DEVELOPER_GUIDE.md)
 
-## Requirements
+Этот документ описывает устройство репозитория и базовый рабочий процесс разработки.
+
+## Требования
 
 - .NET 8 SDK
 - Git
 
-## Repository Layout
+## Структура репозитория
 
 ```text
 src/
-├── SnapForge.Core/   Shared rendering, config, presets, themes, and models.
-├── SnapForge.Cli/    Spectre.Console CLI commands and tool packaging.
-└── SnapForge.Web/    Local Razor Pages Web GUI.
+├── SnapForge.Core/   Общий рендеринг, конфиги, пресеты, темы и модели.
+├── SnapForge.Cli/    CLI-команды Spectre.Console и упаковка tool-пакета.
+└── SnapForge.Web/    Локальный Web GUI на Razor Pages.
 
 tests/
-└── SnapForge.Tests/  xUnit coverage for registries, config loading, and rendering contracts.
+└── SnapForge.Tests/  xUnit-тесты реестров, конфигов и контрактов рендера.
 ```
 
-## Local Checks
+## Локальные проверки
 
-Run these before opening a pull request:
+Перед pull request запускайте:
 
 ```bash
 dotnet restore
@@ -31,36 +33,34 @@ dotnet format --verify-no-changes --no-restore
 dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --no-build --output artifacts/packages
 ```
 
-## Architecture Notes
+## Архитектура
 
-SnapForge intentionally avoids heavyweight architecture. The main boundaries are:
+SnapForge намеренно не использует тяжёлую архитектуру. Основные границы такие:
 
-- `SnapForge.Core` owns reusable behavior: rendering, models, presets, themes, config parsing, validation helpers.
-- `SnapForge.Cli` owns command parsing, console output, command-level orchestration, and tool packaging.
-- `SnapForge.Web` owns browser workflows and reuses `SnapForge.Core` for rendering.
+- `SnapForge.Core` содержит рендеринг, модели, пресеты, темы, парсинг конфигов и helper-валидацию.
+- `SnapForge.Cli` отвечает за команды, консольный вывод, orchestration и упаковку .NET tool.
+- `SnapForge.Web` отвечает за браузерный сценарий и переиспользует `SnapForge.Core`.
 
-Keep new features close to these boundaries. Avoid moving rendering logic into CLI or Web-specific code.
+Новые возможности лучше добавлять рядом с этими границами, не перенося рендеринг в CLI или Web-слой.
 
-## Rendering Changes
+## Изменения рендеринга
 
-When changing visual output:
+Когда меняется визуальный вывод:
 
-1. Add or update focused tests when behavior changes.
-2. Generate at least one local card from `examples/input/sample.png`.
-3. Review the PNG before opening a PR.
-4. Update example images only when they are intentionally part of documentation.
+1. Добавьте или обновите точечные тесты.
+2. Сгенерируйте хотя бы одну карточку из `examples/input/sample.png`.
+3. Посмотрите PNG перед PR.
+4. Обновляйте example images только если это намеренная часть документации.
 
-## Release Flow
+## Release flow
 
-Releases are produced by `.github/workflows/release.yml`.
-
-To publish a release:
+Релизы собирает `.github/workflows/release.yml`.
 
 ```bash
 git checkout main
 git pull --ff-only origin main
-git tag v0.1.0
+git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
-The release workflow publishes platform-specific CLI archives and a `.nupkg` package to the GitHub Release.
+Workflow публикует архивы CLI для платформ, `.nupkg` и `SHA256SUMS.txt`.
