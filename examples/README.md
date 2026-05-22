@@ -10,7 +10,8 @@ examples/
     ├── sample-github-dark.png
     ├── sample-social-light.png
     ├── sample-portfolio-dark.png
-    └── sample-open-graph-light.png
+    ├── sample-open-graph-light.png
+    └── sample-slide-dark.png
 ```
 
 `examples/output` is ignored by Git except for `.gitkeep` and the documented sample cards in this gallery. Other generated cards stay local by default.
@@ -88,6 +89,22 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 
 Output size: `1200x630`.
 
+## Presentation Slide Card
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
+  --output ./examples/output/sample-slide-dark.png \
+  --title "SnapForge" \
+  --subtitle "Presentation-ready screenshot cards" \
+  --preset slide \
+  --theme dark \
+  --padding 140
+```
+
+Output size: `1920x1080`.
+
+For classic 4:3 slides, use `--preset slide-4-3`. Output size: `1600x1200`.
+
 ## Custom Background Color
 
 Use `--background` when a card needs to match a project, changelog, or release visual system:
@@ -134,6 +151,7 @@ The sample input screenshot is a synthetic interface created for this repository
 | `social` | `light` | `output/sample-social-light.png` |
 | `portfolio` | `dark` | `output/sample-portfolio-dark.png` |
 | `open-graph` | `light` | `output/sample-open-graph-light.png` |
+| `slide` | `dark` | `output/sample-slide-dark.png` |
 
 ## Notes
 

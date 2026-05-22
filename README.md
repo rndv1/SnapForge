@@ -140,6 +140,8 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 | `open-graph` | `1200x630` | Open Graph images, link previews, social cards |
 | `social` | `1080x1080` | Square social posts and profile updates |
 | `portfolio` | `1600x900` | Portfolio case studies and presentation slides |
+| `slide` | `1920x1080` | 16:9 presentation slides and high-resolution decks |
+| `slide-4-3` | `1600x1200` | Classic 4:3 presentation slides |
 
 ## Themes
 
@@ -154,7 +156,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Validates the input file path before rendering.
 - Creates the output directory when needed.
 - Prevents overwriting the original source screenshot.
-- Supports `github`, `open-graph`, `social`, and `portfolio` presets.
+- Supports `github`, `open-graph`, `social`, `portfolio`, `slide`, and `slide-4-3` presets.
 - Supports `light` and `dark` themes.
 - Supports optional custom background colors.
 - Supports optional card padding controls.
@@ -187,6 +189,15 @@ The repository includes a small sample screenshot and generated cards so you can
   <tr>
     <td><img src="examples/output/sample-social-light.png" alt="Generated SnapForge social light card" width="320"></td>
     <td><img src="examples/output/sample-portfolio-dark.png" alt="Generated SnapForge portfolio dark card" width="420"></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <th>Presentation slide card</th>
+  </tr>
+  <tr>
+    <td><img src="examples/output/sample-slide-dark.png" alt="Generated SnapForge presentation slide card" width="520"></td>
   </tr>
 </table>
 
@@ -247,7 +258,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verificatio
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
-The current version adds a small Web GUI, an Open Graph preset, optional custom background colors, and optional card padding controls while keeping the rendering model predictable.
+The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, and optional card padding controls while keeping the rendering model predictable.
 
 ## Roadmap
 
@@ -278,7 +289,7 @@ The current version adds a small Web GUI, an Open Graph preset, optional custom 
 - [x] Web GUI render history for the current session
 - [x] Custom background colors
 - [x] Optional card padding controls
-- [ ] Additional presets for presentation slides
+- [x] Additional presets for presentation slides
 - [ ] JSON config files for repeatable project branding
 - [ ] Batch mode for generating multiple cards
 
