@@ -2,14 +2,15 @@
 @model ErrorModel
 
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = Model.Text.ErrorTitle;
+    ViewData["Language"] = Model.Text.HtmlLang;
 }
 
 <div class="app-shell">
     <main class="error-view">
-        <span class="product-label">SnapForge Web</span>
-        <h1>Something went wrong</h1>
-        <p>The generator could not complete the request.</p>
-        <a class="repo-link" asp-page="/Index">Back to generator</a>
+        <span class="product-label">@Model.Text.ProductLabel</span>
+        <h1>@Model.Text.ErrorTitle</h1>
+        <p>@Model.Text.ErrorDescription</p>
+        <a class="repo-link" asp-page="/Index" asp-route-lang="@Model.Text.Code">@Model.Text.BackToGenerator</a>
     </main>
 </div>

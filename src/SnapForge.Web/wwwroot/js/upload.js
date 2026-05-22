@@ -9,7 +9,7 @@
 
   const setFileName = () => {
     const file = input.files?.[0];
-    fileName.textContent = file?.name ?? "No file selected";
+    fileName.textContent = file?.name ?? fileName.dataset.emptyText ?? "No file selected";
     dropzone.classList.toggle("has-file", Boolean(file));
   };
 
