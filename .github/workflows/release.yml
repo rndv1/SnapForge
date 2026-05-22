@@ -50,14 +50,95 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:PublishTrimmed=false
+          --output artifacts/publish/snapforge-cli-${{ matrix.rid }}
+
+      - name: Normalize executable name
+        shell: pwsh
+        run: |
+          $publishDir = "artifacts/publish/snapforge-cli-${{ matrix.rid }}"
+          $windowsExe = Join-Path $publishDir "SnapForge.Cli.exe"
+          $unixExe = Join-Path $publishDir "SnapForge.Cli"
+
+          if (Test-Path $windowsExe) {
+            Rename-Item -Path $windowsExe -NewName "snapforge-cli.exe" -Force
+          }
+
+          if (Test-Path $unixExe) {
+            Rename-Item -Path $unixExe -NewName "snapforge-cli" -Force
+          }
+
+      - name: Archive Windows binary
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts/release | Out-Null
+          Compress-Archive `
+            -Path artifacts/publish/snapforge-cli-${{ matrix.rid }}/* `
+            -DestinationPath artifacts/release/snapforge-cli-${{ matrix.rid }}.zip `
+            -Force
+
+      - name: Archive Unix binary
+        if: matrix.archive == 'tar'
+        shell: bash
+        run: |
+          mkdir -p artifacts/release
+          tar -czf artifacts/release/snapforge-cli-${{ matrix.rid }}.tar.gz -C artifacts/publish snapforge-cli-${{ matrix.rid }}
+
+      - name: Upload release asset
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapforge-cli-${{ matrix.rid }}
+          path: artifacts/release/*
+          if-no-files-found: error
+
+  publish-web-app:
+    name: Publish Web App (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            archive: zip
+          - os: ubuntu-latest
+            rid: linux-x64
+            archive: tar
+          - os: macos-latest
+            rid: osx-x64
+            archive: tar
+          - os: macos-latest
+            rid: osx-arm64
+            archive: tar
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Publish
+        run: >
+          dotnet publish src/SnapForge.Web/SnapForge.Web.csproj
+          --configuration Release
+          --runtime ${{ matrix.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:PublishTrimmed=false
           --output artifacts/publish/snapforge-${{ matrix.rid }}
 
       - name: Normalize executable name
         shell: pwsh
         run: |
           $publishDir = "artifacts/publish/snapforge-${{ matrix.rid }}"
-          $windowsExe = Join-Path $publishDir "SnapForge.Cli.exe"
-          $unixExe = Join-Path $publishDir "SnapForge.Cli"
+          $windowsExe = Join-Path $publishDir "SnapForge.Web.exe"
+          $unixExe = Join-Path $publishDir "SnapForge.Web"
 
           if (Test-Path $windowsExe) {
             Rename-Item -Path $windowsExe -NewName "snapforge.exe" -Force
@@ -67,7 +148,7 @@ jobs:
             Rename-Item -Path $unixExe -NewName "snapforge" -Force
           }
 
-      - name: Archive Windows binary
+      - name: Archive Windows app
         if: matrix.archive == 'zip'
         shell: pwsh
         run: |
@@ -77,14 +158,14 @@ jobs:
             -DestinationPath artifacts/release/snapforge-${{ matrix.rid }}.zip `
             -Force
 
-      - name: Archive Unix binary
+      - name: Archive Unix app
         if: matrix.archive == 'tar'
         shell: bash
         run: |
           mkdir -p artifacts/release
           tar -czf artifacts/release/snapforge-${{ matrix.rid }}.tar.gz -C artifacts/publish snapforge-${{ matrix.rid }}
 
-      - name: Upload release asset
+      - name: Upload app asset
         uses: actions/upload-artifact@v7
         with:
           name: snapforge-${{ matrix.rid }}
@@ -122,6 +203,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs:
       - publish-cli
+      - publish-web-app
       - pack-tool
     runs-on: ubuntu-latest
 

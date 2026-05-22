@@ -9,10 +9,13 @@
 - Release asset checksum generation with `SHA256SUMS.txt`.
 - Russian documentation as the default documentation language.
 - English documentation variants with language switch links.
+- Ready-to-run Web App archives where `snapforge.exe` starts the local Web GUI and opens the browser.
+- `RU` / `EN` language switch in the Web GUI.
 
 ### Changed
 
 - Release creation now uses GitHub CLI instead of a third-party release action.
+- CLI archives are renamed to `snapforge-cli-*` to separate terminal usage from the ready-to-run Web App.
 
 ## 0.1.0
 

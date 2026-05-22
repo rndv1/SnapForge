@@ -2,28 +2,36 @@
 
 **Язык:** Русский | [English](en/USER_GUIDE.md)
 
-SnapForge превращает скриншоты в аккуратные PNG-карточки для README, changelog, социальных сетей, портфолио и презентаций.
+SnapForge превращает скриншоты в аккуратные PNG-карточки для README, changelog, социальных сетей, портфолио и презентаций. Основной способ для проверяющего — готовый Web App, который запускается через `snapforge.exe`.
 
 ## Установка
 
-Самый простой способ проверки — скачать готовый CLI-архив из GitHub Releases:
+Самый простой способ проверки — скачать готовый Web App архив из GitHub Releases:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Выберите архив для своей платформы, распакуйте и запустите:
+Выберите Web App архив для своей платформы, распакуйте и запустите:
 
 ```bash
-snapforge --help
+./snapforge
 ```
 
-На Windows исполняемый файл называется `snapforge.exe`.
+На Windows исполняемый файл называется `snapforge.exe`. При запуске приложение откроет браузер с локальным интерфейсом.
+
+## Web GUI
+
+В Web GUI можно загрузить скриншот, выбрать пресет, тему, цвет фона, padding и скачать готовый PNG.
+
+Интерфейс по умолчанию русский. В правом верхнем углу есть переключатель `RU` / `EN`.
 
 ## Генерация одной карточки
 
+Для терминального режима используйте CLI-архивы `snapforge-cli-*` или установленный .NET tool.
+
 ```bash
-snapforge card ./examples/input/sample.png \
+snapforge-cli card ./examples/input/sample.png \
   --output ./examples/output/sample-card.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
@@ -34,7 +42,7 @@ snapforge card ./examples/input/sample.png \
 Windows PowerShell:
 
 ```powershell
-snapforge card .\examples\input\sample.png `
+snapforge-cli card .\examples\input\sample.png `
   --output .\examples\output\sample-card.png `
   --title "SnapForge" `
   --subtitle "GitHub-ready screenshots" `
@@ -72,7 +80,7 @@ snapforge card .\examples\input\sample.png `
 Запуск с конфигом:
 
 ```bash
-snapforge card ./examples/input/sample.png \
+snapforge-cli card ./examples/input/sample.png \
   --output ./examples/output/sample-card.png \
   --config ./examples/snapforge.config.json
 ```
@@ -84,17 +92,15 @@ snapforge card ./examples/input/sample.png \
 Batch mode генерирует несколько карточек из одного JSON-файла:
 
 ```bash
-snapforge batch ./examples/snapforge.batch.json
+snapforge-cli batch ./examples/snapforge.batch.json
 ```
 
 По умолчанию SnapForge продолжает обработку после ошибки отдельной карточки и завершает процесс с кодом `1`, если была хотя бы одна ошибка. Используйте `--stop-on-error`, если CI должен остановиться на первой ошибке.
 
-## Web GUI
-
-SnapForge также содержит локальный web-интерфейс:
+## Запуск Web GUI из исходников
 
 ```bash
 dotnet run --project src/SnapForge.Web
 ```
 
-Откройте URL, который выведет ASP.NET Core, загрузите скриншот, выберите настройки карточки и скачайте готовый PNG.
+Откройте URL, который выведет ASP.NET Core, если браузер не открылся автоматически.

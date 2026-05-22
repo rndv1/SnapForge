@@ -9,6 +9,7 @@ using SnapForge.Core.Presets;
 using SnapForge.Core.Rendering;
 using SnapForge.Core.Themes;
 using SnapForge.Core.Utils;
+using SnapForge.Web.Localization;
 
 namespace SnapForge.Web.Pages;
 
@@ -41,6 +42,9 @@ public sealed class IndexModel : PageModel
     [BindProperty]
     public CardFormInput Input { get; set; } = CardFormInput.Default();
 
+    [BindProperty(SupportsGet = true)]
+    public string? Lang { get; set; }
+
     public GeneratedCard? Result { get; private set; }
 
     public IReadOnlyList<GeneratedCard> History { get; private set; } = [];
@@ -48,6 +52,10 @@ public sealed class IndexModel : PageModel
     public string? ErrorMessage { get; private set; }
 
     public string? SuccessMessage { get; private set; }
+
+    public WebCopy Text { get; private set; } = WebCopy.For(WebCopy.RussianCode);
+
+    public string CurrentLanguage { get; private set; } = WebCopy.RussianCode;
 
     public IReadOnlyList<SelectListItem> PresetOptions =>
         BuiltInPresets.All
@@ -59,7 +67,7 @@ public sealed class IndexModel : PageModel
     public IReadOnlyList<SelectListItem> ThemeOptions =>
         BuiltInThemes.All
             .Select(theme => new SelectListItem(
-                text: theme.Name,
+                text: Text.ThemeOption(theme.Name),
                 value: theme.Name))
             .ToArray();
 
@@ -76,13 +84,13 @@ public sealed class IndexModel : PageModel
         }
     }
 
-    public string PreviewTitle => Result is null ? "Sample output" : "Generated output";
+    public string PreviewTitle => Result is null ? Text.PreviewTitleSample : Text.PreviewTitleGenerated;
 
     public string PreviewImageSource => ResultDataUrl ?? Url.Content("~/images/sample-card.png");
 
     public string PreviewImageAlt => Result is null
-        ? "Sample SnapForge card preview"
-        : "Generated SnapForge card preview";
+        ? Text.PreviewAltSample
+        : Text.PreviewAltGenerated;
 
     public string? ResultDataUrl => Result is null
         ? null
@@ -92,29 +100,34 @@ public sealed class IndexModel : PageModel
 
     public string DisplayTheme => Result?.ThemeName ?? Input.Theme;
 
-    public string DisplayBackground => Result?.BackgroundLabel
-        ?? (Input.UseCustomBackground ? Input.BackgroundColor : "theme default");
+    public string DisplayBackground => Result is null
+        ? (Input.UseCustomBackground ? Input.BackgroundColor : Text.ThemeDefault)
+        : FormatBackground(Result);
 
-    public string DisplayPadding => Result?.PaddingLabel
-        ?? (Input.UseCustomPadding ? $"{Input.Padding}px" : "auto");
+    public string DisplayPadding => Result is null
+        ? (Input.UseCustomPadding ? $"{Input.Padding}px" : Text.AutoPadding)
+        : FormatPadding(Result);
 
     public string DisplaySize => Result is null
         ? SelectedPresetSize
         : $"{Result.Width}x{Result.Height}";
 
     public string DisplayFileSize => Result is null
-        ? "sample"
+        ? Text.SampleFile
         : FormatBytes(Result.FileSizeBytes);
 
     public void OnGet()
     {
-        Input = CardFormInput.Default();
+        SetLanguage(Lang);
+        Input = CardFormInput.Default(CurrentLanguage);
         History = ReadHistory();
     }
 
     public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
     {
         Input.Normalize();
+        SetLanguage(Input.Language);
+        Input.Language = CurrentLanguage;
         History = ReadHistory();
 
         var validationError = ValidateInput(out var preset, out var theme, out var backgroundColor, out var padding);
@@ -164,23 +177,23 @@ public sealed class IndexModel : PageModel
                 Padding: padding);
 
             History = StoreHistory(Result);
-            SuccessMessage = "PNG generated.";
+            SuccessMessage = Text.SuccessMessage;
         }
         catch (UnknownImageFormatException)
         {
-            ErrorMessage = "Input image format is not supported.";
+            ErrorMessage = Text.UnknownImageFormatError;
         }
         catch (InvalidImageContentException exception)
         {
-            ErrorMessage = $"Input image could not be decoded: {exception.Message}";
+            ErrorMessage = string.Format(Text.InvalidImageTemplate, exception.Message);
         }
         catch (UnauthorizedAccessException exception)
         {
-            ErrorMessage = $"SnapForge cannot access a temporary file: {exception.Message}";
+            ErrorMessage = string.Format(Text.TemporaryAccessTemplate, exception.Message);
         }
         catch (IOException exception)
         {
-            ErrorMessage = $"SnapForge could not read or write a temporary file: {exception.Message}";
+            ErrorMessage = string.Format(Text.TemporaryIoTemplate, exception.Message);
         }
         finally
         {
@@ -232,50 +245,50 @@ public sealed class IndexModel : PageModel
 
         if (Input.Screenshot is null || Input.Screenshot.Length == 0)
         {
-            return "Choose a screenshot file.";
+            return Text.ChooseScreenshotError;
         }
 
         if (Input.Screenshot.Length > MaxUploadBytes)
         {
-            return $"Screenshot must be {FormatBytes(MaxUploadBytes)} or smaller.";
+            return string.Format(Text.ScreenshotTooLargeTemplate, FormatBytes(MaxUploadBytes));
         }
 
         var extension = Path.GetExtension(Input.Screenshot.FileName);
         if (!SupportedInputExtensions.Contains(extension))
         {
-            return "Screenshot must be PNG, JPEG, WebP, GIF, or BMP.";
+            return Text.UnsupportedExtensionError;
         }
 
         if (string.IsNullOrWhiteSpace(Input.Title))
         {
-            return "Title is required.";
+            return Text.TitleRequiredError;
         }
 
         if (string.IsNullOrWhiteSpace(Input.Subtitle))
         {
-            return "Subtitle is required.";
+            return Text.SubtitleRequiredError;
         }
 
         if (!Presets.TryGet(Input.Preset, out preset))
         {
-            return $"Unknown preset. Supported presets: {Presets.FormatSupportedNames()}.";
+            return string.Format(Text.UnknownPresetTemplate, Presets.FormatSupportedNames());
         }
 
         if (!Themes.TryGet(Input.Theme, out theme))
         {
-            return $"Unknown theme. Supported themes: {Themes.FormatSupportedNames()}.";
+            return string.Format(Text.UnknownThemeTemplate, Themes.FormatSupportedNames());
         }
 
         if (Input.UseCustomBackground && !HexColor.TryNormalize(Input.BackgroundColor, out backgroundColor))
         {
-            return $"Background color must use {HexColor.ExpectedFormat}.";
+            return string.Format(Text.InvalidBackgroundTemplate, HexColor.ExpectedFormat);
         }
 
         if (Input.UseCustomPadding)
         {
             if (!CardPadding.IsValid(Input.Padding))
             {
-                return $"Padding must be in the supported range: {CardPadding.FormatRange()}.";
+                return string.Format(Text.InvalidPaddingTemplate, CardPadding.FormatRange());
             }
 
             padding = Input.Padding;
@@ -284,11 +297,27 @@ public sealed class IndexModel : PageModel
         return null;
     }
 
-    private static string FormatBytes(long bytes)
+    private void SetLanguage(string? language)
+    {
+        CurrentLanguage = WebCopy.NormalizeLanguage(language);
+        Text = WebCopy.For(CurrentLanguage);
+    }
+
+    public string FormatBackground(GeneratedCard card)
+    {
+        return card.BackgroundColor ?? Text.ThemeDefault;
+    }
+
+    public string FormatPadding(GeneratedCard card)
+    {
+        return card.Padding is null ? Text.AutoPadding : $"{card.Padding}px";
+    }
+
+    private string FormatBytes(long bytes)
     {
         return bytes < 1024
-            ? $"{bytes:N0} bytes"
-            : $"{bytes / 1024d:N1} KB";
+            ? $"{bytes:N0} {Text.BytesUnit}"
+            : $"{bytes / 1024d:N1} {Text.KilobytesUnit}";
     }
 
     private static void TryDeleteDirectory(string path)
@@ -313,6 +342,8 @@ public sealed class CardFormInput
 {
     public IFormFile? Screenshot { get; set; }
 
+    public string Language { get; set; } = WebCopy.RussianCode;
+
     public string Title { get; set; } = string.Empty;
 
     public string Subtitle { get; set; } = string.Empty;
@@ -329,12 +360,15 @@ public sealed class CardFormInput
 
     public int Padding { get; set; } = CardPadding.Default;
 
-    public static CardFormInput Default()
+    public static CardFormInput Default(string language = WebCopy.RussianCode)
     {
+        var text = WebCopy.For(language);
+
         return new CardFormInput
         {
-            Title = "SnapForge",
-            Subtitle = "GitHub-ready screenshots",
+            Language = text.Code,
+            Title = text.DefaultTitle,
+            Subtitle = text.DefaultSubtitle,
             Preset = BuiltInPresets.GitHub.Name,
             Theme = BuiltInThemes.Dark.Name,
             BackgroundColor = BuiltInThemes.Dark.BackgroundColor,
@@ -344,6 +378,7 @@ public sealed class CardFormInput
 
     public void Normalize()
     {
+        Language = WebCopy.NormalizeLanguage(Language);
         Title = Title.Trim();
         Subtitle = Subtitle.Trim();
         Preset = Preset.Trim();

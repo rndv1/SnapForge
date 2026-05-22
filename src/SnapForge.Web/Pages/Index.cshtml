@@ -2,30 +2,38 @@
 @model IndexModel
 
 @{
-    ViewData["Title"] = "Web Generator";
+    ViewData["Title"] = Model.Text.PageTitle;
+    ViewData["Language"] = Model.Text.HtmlLang;
 }
 
 <div class="app-shell">
     <header class="topbar">
         <div>
-            <span class="product-label">SnapForge Web</span>
-            <h1>Generate a card</h1>
+            <span class="product-label">@Model.Text.ProductLabel</span>
+            <h1>@Model.Text.MainHeading</h1>
         </div>
-        <a class="repo-link" href="https://github.com/rndv1/SnapForge">GitHub</a>
+        <div class="topbar-actions">
+            <nav class="language-switch" aria-label="Language">
+                <a asp-page="/Index" asp-route-lang="ru" class="@(Model.CurrentLanguage == "ru" ? "is-active" : null)">RU</a>
+                <a asp-page="/Index" asp-route-lang="en" class="@(Model.CurrentLanguage == "en" ? "is-active" : null)">EN</a>
+            </nav>
+            <a class="repo-link" href="https://github.com/rndv1/SnapForge">@Model.Text.GitHubLink</a>
+        </div>
     </header>
 
     <main class="workspace">
         <section class="tool-panel" aria-labelledby="card-form-title">
             <div class="panel-heading">
-                <h2 id="card-form-title">Card settings</h2>
+                <h2 id="card-form-title">@Model.Text.CardSettings</h2>
                 <span>@Model.SelectedPresetSize</span>
             </div>
 
             <form method="post" enctype="multipart/form-data" class="card-form">
                 @Html.AntiForgeryToken()
+                <input asp-for="Input.Language" type="hidden" />
 
                 <div class="field">
-                    <label asp-for="Input.Screenshot">Screenshot</label>
+                    <label asp-for="Input.Screenshot">@Model.Text.ScreenshotLabel</label>
                     <div class="dropzone" data-dropzone>
                         <input
                             asp-for="Input.Screenshot"
@@ -35,31 +43,31 @@
                             data-file-input
                             aria-describedby="screenshot-file-state" />
                         <div class="dropzone-copy">
-                            <strong>Drop screenshot</strong>
-                            <span id="screenshot-file-state" data-file-name>No file selected</span>
+                            <strong>@Model.Text.DropScreenshot</strong>
+                            <span id="screenshot-file-state" data-file-name data-empty-text="@Model.Text.NoFileSelected">@Model.Text.NoFileSelected</span>
                         </div>
-                        <span class="file-action">Browse</span>
+                        <span class="file-action">@Model.Text.Browse</span>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label asp-for="Input.Title">Title</label>
+                    <label asp-for="Input.Title">@Model.Text.TitleLabel</label>
                     <input asp-for="Input.Title" autocomplete="off" />
                 </div>
 
                 <div class="field">
-                    <label asp-for="Input.Subtitle">Subtitle</label>
+                    <label asp-for="Input.Subtitle">@Model.Text.SubtitleLabel</label>
                     <input asp-for="Input.Subtitle" autocomplete="off" />
                 </div>
 
                 <div class="field-row">
                     <div class="field">
-                        <label asp-for="Input.Preset">Preset</label>
+                        <label asp-for="Input.Preset">@Model.Text.PresetLabel</label>
                         <select asp-for="Input.Preset" asp-items="Model.PresetOptions"></select>
                     </div>
 
                     <div class="field">
-                        <label asp-for="Input.Theme">Theme</label>
+                        <label asp-for="Input.Theme">@Model.Text.ThemeLabel</label>
                         <select asp-for="Input.Theme" asp-items="Model.ThemeOptions"></select>
                     </div>
                 </div>
@@ -68,11 +76,11 @@
                     <div class="color-option">
                         <label class="checkbox-control">
                             <input asp-for="Input.UseCustomBackground" type="checkbox" />
-                            <span>Custom background</span>
+                            <span>@Model.Text.CustomBackground</span>
                         </label>
 
                         <label class="color-picker">
-                            <span>Color</span>
+                            <span>@Model.Text.ColorLabel</span>
                             <input asp-for="Input.BackgroundColor" type="color" />
                         </label>
                     </div>
@@ -80,17 +88,17 @@
                     <div class="padding-option">
                         <label class="checkbox-control">
                             <input asp-for="Input.UseCustomPadding" type="checkbox" />
-                            <span>Custom padding</span>
+                            <span>@Model.Text.CustomPadding</span>
                         </label>
 
                         <label class="number-picker">
-                            <span>Pixels</span>
+                            <span>@Model.Text.PixelsLabel</span>
                             <input asp-for="Input.Padding" type="number" min="32" max="240" step="8" />
                         </label>
                     </div>
                 </div>
 
-                <button type="submit">Generate PNG</button>
+                <button type="submit">@Model.Text.GenerateButton</button>
             </form>
 
             @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
@@ -106,13 +114,13 @@
         <section class="preview-panel" aria-labelledby="preview-title">
             <div class="preview-heading">
                 <div>
-                    <span class="product-label">Preview</span>
+                    <span class="product-label">@Model.Text.PreviewLabel</span>
                     <h2 id="preview-title">@Model.PreviewTitle</h2>
                 </div>
 
                 @if (Model.Result is not null)
                 {
-                    <a class="download-link" href="@Model.ResultDataUrl" download="snapforge-card.png">Download PNG</a>
+                    <a class="download-link" href="@Model.ResultDataUrl" download="snapforge-card.png">@Model.Text.DownloadPng</a>
                 }
             </div>
 
@@ -122,27 +130,27 @@
 
             <dl class="metadata">
                 <div>
-                    <dt>Preset</dt>
+                    <dt>@Model.Text.MetadataPreset</dt>
                     <dd>@Model.DisplayPreset</dd>
                 </div>
                 <div>
-                    <dt>Theme</dt>
+                    <dt>@Model.Text.MetadataTheme</dt>
                     <dd>@Model.DisplayTheme</dd>
                 </div>
                 <div>
-                    <dt>Background</dt>
+                    <dt>@Model.Text.MetadataBackground</dt>
                     <dd>@Model.DisplayBackground</dd>
                 </div>
                 <div>
-                    <dt>Padding</dt>
+                    <dt>@Model.Text.MetadataPadding</dt>
                     <dd>@Model.DisplayPadding</dd>
                 </div>
                 <div>
-                    <dt>Size</dt>
+                    <dt>@Model.Text.MetadataSize</dt>
                     <dd>@Model.DisplaySize</dd>
                 </div>
                 <div>
-                    <dt>File</dt>
+                    <dt>@Model.Text.MetadataFile</dt>
                     <dd>@Model.DisplayFileSize</dd>
                 </div>
             </dl>
@@ -151,7 +159,7 @@
             {
                 <section class="history-panel" aria-labelledby="history-title">
                     <div class="history-heading">
-                        <h2 id="history-title">Session history</h2>
+                        <h2 id="history-title">@Model.Text.HistoryTitle</h2>
                         <span>@Model.History.Count</span>
                     </div>
 
@@ -161,7 +169,7 @@
                             <li>
                                 <div class="history-copy">
                                     <strong>@item.Title</strong>
-                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @item.BackgroundLabel / @item.PaddingLabel / @item.SizeLabel</span>
+                                    <span>@item.CreatedAtLabel / @item.PresetName / @item.ThemeName / @Model.FormatBackground(item) / @Model.FormatPadding(item) / @item.SizeLabel</span>
                                 </div>
                                 <a class="history-download" href="@item.DataUrl" download="@item.DownloadFileName">PNG</a>
                             </li>
