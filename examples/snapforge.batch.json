@@ -1,0 +1,29 @@
+{
+  "defaults": {
+    "input": "./input/sample.png",
+    "title": "SnapForge",
+    "subtitle": "Batch-generated screenshot cards",
+    "preset": "github",
+    "theme": "dark",
+    "background": "#0F172A",
+    "padding": 112
+  },
+  "cards": [
+    {
+      "output": "./output/batch-github-dark.png"
+    },
+    {
+      "output": "./output/batch-open-graph-light.png",
+      "subtitle": "Open Graph-ready batch output",
+      "preset": "open-graph",
+      "theme": "light",
+      "background": "#F7F8FA"
+    },
+    {
+      "output": "./output/batch-slide-dark.png",
+      "subtitle": "Presentation-ready batch output",
+      "preset": "slide",
+      "padding": 140
+    }
+  ]
+}
