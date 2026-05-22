@@ -112,6 +112,7 @@ snapforge-cli batch <config> [--stop-on-error]
 - Batch mode для генерации нескольких карточек за один запуск.
 - Готовое локальное Web-приложение, запускаемое через `snapforge.exe`.
 - Переключение интерфейса между русским и английским языком.
+- Загрузка скриншота через выбор файла, drag-and-drop на панель настроек или вставку из буфера обмена.
 - GitHub Actions CI и release workflow.
 - Готовые release-архивы Web App для Windows, Linux и macOS.
 - Отдельные CLI-архивы `snapforge-cli-*`.
