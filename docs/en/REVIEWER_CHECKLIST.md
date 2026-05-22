@@ -37,13 +37,14 @@ Reviewers can verify SnapForge without building from source:
 https://github.com/rndv1/SnapForge/releases
 ```
 
-The release workflow creates Windows, Linux, and macOS CLI archives, a .NET tool package, and `SHA256SUMS.txt`.
+The release workflow creates Windows, Linux, and macOS Web App archives, separate `snapforge-cli-*` CLI archives, a .NET tool package, and `SHA256SUMS.txt`.
 
 ## Quick Verification Command
 
-After extracting a release archive:
+After extracting the Windows Web App archive:
 
-```bash
-snapforge --help
-snapforge card ./examples/input/sample.png --output ./sample-card.png --title "SnapForge" --subtitle "Release verification" --preset github --theme dark
+```powershell
+.\snapforge.exe
 ```
+
+The local Web GUI opens in the browser. Upload a PNG/JPG screenshot, choose settings, and download the result. The interface supports the `RU` / `EN` language switch.

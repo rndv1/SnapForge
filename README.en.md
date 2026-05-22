@@ -4,7 +4,7 @@
 
 Turn plain screenshots into beautiful GitHub-ready cards.
 
-SnapForge is a C#/.NET utility for turning ordinary screenshots into polished PNG cards for GitHub READMEs, portfolios, changelogs, social posts, and project presentations.
+SnapForge is a ready-to-run local Web app and CLI built with C#/.NET for turning ordinary screenshots into polished PNG cards for GitHub READMEs, portfolios, changelogs, social posts, and project presentations.
 
 ## Problem
 
@@ -28,16 +28,16 @@ Use SnapForge without building from source:
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Download the archive for your platform, extract it, and run:
+Download the app archive for your platform, extract it, and run `snapforge`. On Windows, opening `snapforge.exe` starts the local Web GUI and opens the browser.
 
-```bash
-snapforge --help
+```powershell
+.\snapforge.exe
 ```
 
-Generate a card:
+The CLI is still available separately in `snapforge-cli-*` archives and in the `.nupkg` package:
 
 ```bash
-snapforge card ./examples/input/sample.png \
+snapforge-cli card ./examples/input/sample.png \
   --output ./examples/output/sample-card.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
@@ -62,9 +62,11 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 ## CLI
 
 ```bash
-snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
-snapforge batch <config> [--stop-on-error]
+snapforge-cli card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
+snapforge-cli batch <config> [--stop-on-error]
 ```
+
+When SnapForge is installed as a .NET tool from `.nupkg`, the command is `snapforge`.
 
 ## Presets
 
@@ -91,9 +93,10 @@ snapforge batch <config> [--stop-on-error]
 - Protection against overwriting the source image.
 - Presets, themes, custom background color, and padding controls.
 - JSON config files and batch mode.
-- Local ASP.NET Core Web GUI.
+- Ready-to-run local Web app launched by `snapforge.exe`.
+- Russian and English Web UI language switch.
 - GitHub Actions CI and release workflow.
-- Prebuilt release archives and a .NET tool package.
+- Prebuilt Web App archives, separate `snapforge-cli-*` archives, and a .NET tool package.
 - `SHA256SUMS.txt` for release asset verification.
 
 ## Before And After
@@ -141,6 +144,8 @@ SnapForge is intentionally small and focused. It gives developers a repeatable w
 - [x] GitHub, social, portfolio, Open Graph, and slide presets
 - [x] JSON config files and batch mode
 - [x] Local Web GUI
+- [x] Web App executable
+- [x] Web UI language switch
 - [x] CI and release assets
 - [x] Release checksums
 - [ ] NuGet publishing

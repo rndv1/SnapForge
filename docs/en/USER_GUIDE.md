@@ -2,26 +2,36 @@
 
 **Language:** [Русский](../USER_GUIDE.md) | English
 
-SnapForge turns screenshots into polished PNG cards for READMEs, changelogs, social posts, portfolios, and slide decks.
+SnapForge turns screenshots into polished PNG cards for READMEs, changelogs, social posts, portfolios, and slide decks. The reviewer-friendly path is the ready-to-run Web App launched by `snapforge.exe`.
 
 ## Install
 
-Download a prebuilt CLI archive from GitHub Releases:
+Download a prebuilt Web App archive from GitHub Releases:
 
 ```text
 https://github.com/rndv1/SnapForge/releases
 ```
 
-Choose the archive for your platform, extract it, and run:
+Choose the Web App archive for your platform, extract it, and run:
 
 ```bash
-snapforge --help
+./snapforge
 ```
+
+On Windows, run `snapforge.exe`. The app opens the local Web UI in your browser.
+
+## Web GUI
+
+In the Web GUI, upload a screenshot, choose a preset, theme, background color, padding, and download the generated PNG.
+
+The interface defaults to Russian. Use the `RU` / `EN` switch in the top-right corner to change languages.
 
 ## Generate One Card
 
+For terminal usage, use the `snapforge-cli-*` archives or the installed .NET tool.
+
 ```bash
-snapforge card ./examples/input/sample.png \
+snapforge-cli card ./examples/input/sample.png \
   --output ./examples/output/sample-card.png \
   --title "SnapForge" \
   --subtitle "GitHub-ready screenshots" \
@@ -32,7 +42,7 @@ snapforge card ./examples/input/sample.png \
 Windows PowerShell:
 
 ```powershell
-snapforge card .\examples\input\sample.png `
+snapforge-cli card .\examples\input\sample.png `
   --output .\examples\output\sample-card.png `
   --title "SnapForge" `
   --subtitle "GitHub-ready screenshots" `
@@ -70,7 +80,7 @@ snapforge card .\examples\input\sample.png `
 Run:
 
 ```bash
-snapforge card ./examples/input/sample.png \
+snapforge-cli card ./examples/input/sample.png \
   --output ./examples/output/sample-card.png \
   --config ./examples/snapforge.config.json
 ```
@@ -78,15 +88,15 @@ snapforge card ./examples/input/sample.png \
 ## Batch Mode
 
 ```bash
-snapforge batch ./examples/snapforge.batch.json
+snapforge-cli batch ./examples/snapforge.batch.json
 ```
 
 Use `--stop-on-error` when a CI job should stop after the first failed card.
 
-## Web GUI
+## Run The Web GUI From Source
 
 ```bash
 dotnet run --project src/SnapForge.Web
 ```
 
-Open the URL printed by ASP.NET Core, upload a screenshot, choose card settings, and download the generated PNG.
+Open the URL printed by ASP.NET Core if the browser does not open automatically.

@@ -15,7 +15,7 @@
 src/
 ├── SnapForge.Core/   Общий рендеринг, конфиги, пресеты, темы и модели.
 ├── SnapForge.Cli/    CLI-команды Spectre.Console и упаковка tool-пакета.
-└── SnapForge.Web/    Локальный Web GUI на Razor Pages.
+└── SnapForge.Web/    Локальный Web App на Razor Pages, публикуемый как snapforge.exe.
 
 tests/
 └── SnapForge.Tests/  xUnit-тесты реестров, конфигов и контрактов рендера.
@@ -39,7 +39,7 @@ SnapForge намеренно не использует тяжёлую архит
 
 - `SnapForge.Core` содержит рендеринг, модели, пресеты, темы, парсинг конфигов и helper-валидацию.
 - `SnapForge.Cli` отвечает за команды, консольный вывод, orchestration и упаковку .NET tool.
-- `SnapForge.Web` отвечает за браузерный сценарий и переиспользует `SnapForge.Core`.
+- `SnapForge.Web` отвечает за браузерный сценарий, локализацию интерфейса, запуск браузера и переиспользует `SnapForge.Core`.
 
 Новые возможности лучше добавлять рядом с этими границами, не перенося рендеринг в CLI или Web-слой.
 
@@ -63,4 +63,4 @@ git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
-Workflow публикует архивы CLI для платформ, `.nupkg` и `SHA256SUMS.txt`.
+Workflow публикует Web App архивы `snapforge-*`, отдельные CLI-архивы `snapforge-cli-*`, `.nupkg` и `SHA256SUMS.txt`.

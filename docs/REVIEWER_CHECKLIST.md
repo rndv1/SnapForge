@@ -39,17 +39,19 @@ https://github.com/rndv1/SnapForge/releases
 
 Release workflow создаёт:
 
-- Windows CLI archive;
-- Linux CLI archive;
-- macOS CLI archives;
+- Windows Web App archive с `snapforge.exe`;
+- Linux Web App archive;
+- macOS Web App archives;
+- отдельные CLI archives `snapforge-cli-*`;
 - .NET tool package;
 - `SHA256SUMS.txt` для проверки целостности файлов.
 
 ## Быстрая проверка
 
-После распаковки release archive:
+После распаковки Windows Web App archive:
 
-```bash
-snapforge --help
-snapforge card ./examples/input/sample.png --output ./sample-card.png --title "SnapForge" --subtitle "Release verification" --preset github --theme dark
+```powershell
+.\snapforge.exe
 ```
+
+Откроется локальный Web GUI. Загрузите PNG/JPG-скриншот, выберите настройки и скачайте результат. Интерфейс поддерживает переключение `RU` / `EN`.

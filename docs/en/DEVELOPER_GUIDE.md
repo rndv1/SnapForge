@@ -15,7 +15,7 @@ This guide explains how the repository is organized and how to work on SnapForge
 src/
 ├── SnapForge.Core/   Shared rendering, config, presets, themes, and models.
 ├── SnapForge.Cli/    Spectre.Console CLI commands and tool packaging.
-└── SnapForge.Web/    Local Razor Pages Web GUI.
+└── SnapForge.Web/    Local Razor Pages Web App published as snapforge.exe.
 
 tests/
 └── SnapForge.Tests/  xUnit coverage for registries, config loading, and rendering contracts.
@@ -39,7 +39,7 @@ SnapForge intentionally avoids heavyweight architecture. The main boundaries are
 
 - `SnapForge.Core` owns rendering, models, presets, themes, config parsing, and validation helpers.
 - `SnapForge.Cli` owns command parsing, console output, command orchestration, and tool packaging.
-- `SnapForge.Web` owns browser workflows and reuses `SnapForge.Core` for rendering.
+- `SnapForge.Web` owns browser workflows, UI localization, browser launch behavior, and reuses `SnapForge.Core` for rendering.
 
 Keep new features close to these boundaries.
 
@@ -63,4 +63,4 @@ git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
-The release workflow publishes platform-specific CLI archives, a `.nupkg` package, and `SHA256SUMS.txt`.
+The release workflow publishes Web App archives `snapforge-*`, separate CLI archives `snapforge-cli-*`, a `.nupkg` package, and `SHA256SUMS.txt`.

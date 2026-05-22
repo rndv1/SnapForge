@@ -4,7 +4,7 @@
 
 SnapForge можно проверить без сборки из исходников: скачайте готовый архив из GitHub Releases.
 
-## Готовые CLI-архивы
+## Готовое приложение
 
 Последний релиз:
 
@@ -16,24 +16,34 @@ Release workflow публикует:
 
 | Файл | Платформа |
 | --- | --- |
-| `snapforge-win-x64.zip` | Windows x64 |
-| `snapforge-linux-x64.tar.gz` | Linux x64 |
-| `snapforge-osx-x64.tar.gz` | macOS Intel |
-| `snapforge-osx-arm64.tar.gz` | macOS Apple Silicon |
+| `snapforge-win-x64.zip` | Web App для Windows x64 |
+| `snapforge-linux-x64.tar.gz` | Web App для Linux x64 |
+| `snapforge-osx-x64.tar.gz` | Web App для macOS Intel |
+| `snapforge-osx-arm64.tar.gz` | Web App для macOS Apple Silicon |
+| `snapforge-cli-win-x64.zip` | CLI для Windows x64 |
+| `snapforge-cli-linux-x64.tar.gz` | CLI для Linux x64 |
+| `snapforge-cli-osx-x64.tar.gz` | CLI для macOS Intel |
+| `snapforge-cli-osx-arm64.tar.gz` | CLI для macOS Apple Silicon |
 | `SnapForge.<version>.nupkg` | пакет .NET tool |
 | `SHA256SUMS.txt` | SHA-256 checksums для release assets |
 
-После распаковки:
+После распаковки Web App запустите:
 
 ```bash
-snapforge --help
+./snapforge
 ```
 
 Windows:
 
 ```powershell
-.\snapforge.exe --help
+.\snapforge.exe
 ```
+
+Приложение поднимет локальный сервер, откроет браузер и будет работать, пока открыто окно процесса.
+
+## CLI
+
+Если нужен терминальный режим, скачайте `snapforge-cli-*` или установите `.nupkg` как .NET tool.
 
 ## Проверка checksums
 
