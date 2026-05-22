@@ -1,0 +1,8 @@
+{
+  "title": "SnapForge",
+  "subtitle": "GitHub-ready screenshots",
+  "preset": "github",
+  "theme": "dark",
+  "background": "#0F172A",
+  "padding": 112
+}

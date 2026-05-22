@@ -53,6 +53,14 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --padding 112
 ```
 
+Or reuse project branding from JSON:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
+  --output ./examples/output/sample-card.png \
+  --config ./examples/snapforge.config.json
+```
+
 Windows PowerShell:
 
 ```powershell
@@ -97,13 +105,13 @@ dotnet tool uninstall --global SnapForge
 ## CLI
 
 ```bash
-snapforge card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>]
+snapforge card [input] --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
 ```
 
 During local development, use:
 
 ```bash
-dotnet run --project src/SnapForge.Cli -- card <input> --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>]
+dotnet run --project src/SnapForge.Cli -- card [input] --output <output> --title <title> --subtitle <subtitle> --preset <preset> --theme <theme> [--background <hex>] [--padding <pixels>] [--config <path>]
 ```
 
 Example:
@@ -121,6 +129,32 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/api-screen.png \
 
 `--background` is optional. When it is omitted, SnapForge uses the selected theme background. Hex colors may be passed as `#RRGGBB` or `RRGGBB`.
 `--padding` is optional. When it is omitted, SnapForge uses automatic preset-aware spacing. Supported values are `32` through `240` pixels.
+`--config` is optional. CLI values override values from the config file.
+
+## JSON Config Files
+
+Use a config file to keep repeatable project branding in one place:
+
+```json
+{
+  "title": "SnapForge",
+  "subtitle": "GitHub-ready screenshots",
+  "preset": "github",
+  "theme": "dark",
+  "background": "#0F172A",
+  "padding": 112
+}
+```
+
+Then render with:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
+  --output ./examples/output/sample-card.png \
+  --config ./examples/snapforge.config.json
+```
+
+Config files may set `input`, `output`, `title`, `subtitle`, `preset`, `theme`, `background`, and `padding`. Relative `input` and `output` paths in config files are resolved from the config file directory.
 
 ## Web GUI
 
@@ -160,8 +194,9 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Supports `light` and `dark` themes.
 - Supports optional custom background colors.
 - Supports optional card padding controls.
+- Supports JSON config files for repeatable project branding.
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
-- Prints a structured console report with input, output, preset, theme, background color, padding, size, and status.
+- Prints a structured console report with input, output, config, preset, theme, background color, padding, size, and status.
 - Provides a local Web GUI for browser-based generation.
 - Supports drag-and-drop uploads in the Web GUI.
 - Keeps recent generated cards available in the current Web GUI session.
@@ -209,6 +244,7 @@ See [examples/README.md](examples/README.md) for copy-ready commands and naming 
 SnapForge/
 ├── src/
 │   ├── SnapForge.Core/
+│   │   ├── Configuration/
 │   │   ├── Models/
 │   │   ├── Presets/
 │   │   ├── Rendering/
@@ -223,6 +259,7 @@ SnapForge/
 ├── tests/
 │   └── SnapForge.Tests/
 ├── examples/
+│   ├── snapforge.config.json
 │   ├── input/
 │   └── output/
 ├── README.md
@@ -258,7 +295,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verificatio
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
-The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, and optional card padding controls while keeping the rendering model predictable.
+The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, optional card padding controls, and JSON config files while keeping the rendering model predictable.
 
 ## Roadmap
 
@@ -290,7 +327,7 @@ The current version adds a small Web GUI, Open Graph and presentation slide pres
 - [x] Custom background colors
 - [x] Optional card padding controls
 - [x] Additional presets for presentation slides
-- [ ] JSON config files for repeatable project branding
+- [x] JSON config files for repeatable project branding
 - [ ] Batch mode for generating multiple cards
 
 ## Made With C# And .NET
