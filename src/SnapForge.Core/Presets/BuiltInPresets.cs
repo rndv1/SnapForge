@@ -10,11 +10,17 @@ public static class BuiltInPresets
 
     public static readonly Preset OpenGraph = new("open-graph", 1200, 630);
 
+    public static readonly Preset Slide = new("slide", 1920, 1080);
+
+    public static readonly Preset SlideFourThree = new("slide-4-3", 1600, 1200);
+
     public static IReadOnlyCollection<Preset> All { get; } =
     [
         GitHub,
         Social,
         Portfolio,
-        OpenGraph
+        OpenGraph,
+        Slide,
+        SlideFourThree
     ];
 }

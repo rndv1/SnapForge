@@ -11,6 +11,8 @@ public sealed class PresetRegistryTests
     [InlineData("social", 1080, 1080)]
     [InlineData("portfolio", 1600, 900)]
     [InlineData("open-graph", 1200, 630)]
+    [InlineData("slide", 1920, 1080)]
+    [InlineData("slide-4-3", 1600, 1200)]
     public void TryGet_ReturnsExpectedBuiltInPresetSize(string name, int expectedWidth, int expectedHeight)
     {
         var found = registry.TryGet(name, out var preset);
