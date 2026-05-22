@@ -26,7 +26,21 @@ The goal is not to replace design software. The goal is to make the common case 
 
 ## Quick Start
 
-Requirements:
+Use SnapForge without building from source:
+
+```text
+https://github.com/rndv1/SnapForge/releases
+```
+
+Download the archive for your platform, extract it, and run:
+
+```bash
+snapforge --help
+```
+
+See [docs/INSTALLATION.md](docs/INSTALLATION.md) for release assets and installation options.
+
+Requirements for source builds:
 
 - .NET 8 SDK
 - A PNG/JPG screenshot to use as input
@@ -298,6 +312,12 @@ SnapForge/
 │   ├── snapforge.batch.json
 │   ├── input/
 │   └── output/
+├── docs/
+│   ├── USER_GUIDE.md
+│   ├── DEVELOPER_GUIDE.md
+│   ├── INSTALLATION.md
+│   └── REVIEWER_CHECKLIST.md
+├── CHANGELOG.md
 ├── README.md
 ├── LICENSE
 └── SnapForge.sln
@@ -325,6 +345,7 @@ dotnet run --project src/SnapForge.Web
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verification guidelines.
+See [docs/USER_GUIDE.md](docs/USER_GUIDE.md), [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md), and [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md) for complete usage, development, and review documentation.
 
 ## Why SnapForge?
 

@@ -1,0 +1,138 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-cli:
+    name: Publish CLI (${{ matrix.rid }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            archive: zip
+          - os: ubuntu-latest
+            rid: linux-x64
+            archive: tar
+          - os: macos-latest
+            rid: osx-x64
+            archive: tar
+          - os: macos-latest
+            rid: osx-arm64
+            archive: tar
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Publish
+        run: >
+          dotnet publish src/SnapForge.Cli/SnapForge.Cli.csproj
+          --configuration Release
+          --runtime ${{ matrix.rid }}
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:PublishTrimmed=false
+          --output artifacts/publish/snapforge-${{ matrix.rid }}
+
+      - name: Normalize executable name
+        shell: pwsh
+        run: |
+          $publishDir = "artifacts/publish/snapforge-${{ matrix.rid }}"
+          $windowsExe = Join-Path $publishDir "SnapForge.Cli.exe"
+          $unixExe = Join-Path $publishDir "SnapForge.Cli"
+
+          if (Test-Path $windowsExe) {
+            Rename-Item -Path $windowsExe -NewName "snapforge.exe" -Force
+          }
+
+          if (Test-Path $unixExe) {
+            Rename-Item -Path $unixExe -NewName "snapforge" -Force
+          }
+
+      - name: Archive Windows binary
+        if: matrix.archive == 'zip'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts/release | Out-Null
+          Compress-Archive `
+            -Path artifacts/publish/snapforge-${{ matrix.rid }}/* `
+            -DestinationPath artifacts/release/snapforge-${{ matrix.rid }}.zip `
+            -Force
+
+      - name: Archive Unix binary
+        if: matrix.archive == 'tar'
+        shell: bash
+        run: |
+          mkdir -p artifacts/release
+          tar -czf artifacts/release/snapforge-${{ matrix.rid }}.tar.gz -C artifacts/publish snapforge-${{ matrix.rid }}
+
+      - name: Upload release asset
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapforge-${{ matrix.rid }}
+          path: artifacts/release/*
+          if-no-files-found: error
+
+  pack-tool:
+    name: Pack .NET tool
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Pack
+        run: dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
+
+      - name: Upload .NET tool package
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapforge-dotnet-tool
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
+
+  create-release:
+    name: Create GitHub release
+    if: startsWith(github.ref, 'refs/tags/')
+    needs:
+      - publish-cli
+      - pack-tool
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release assets
+        uses: actions/download-artifact@v7
+        with:
+          path: artifacts/release-assets
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: artifacts/release-assets/**/*
