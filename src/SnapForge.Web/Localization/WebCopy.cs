@@ -17,7 +17,9 @@ public sealed class WebCopy
         CardSettings = "Настройки карточки",
         ScreenshotLabel = "Скриншот",
         DropScreenshot = "Перетащите скриншот",
+        DropScreenshotHint = "Можно бросить файл на эту панель или вставить из буфера через Ctrl+V.",
         NoFileSelected = "Файл не выбран",
+        UnsupportedDropFile = "Перетащите или вставьте файл изображения.",
         Browse = "Выбрать",
         TitleLabel = "Заголовок",
         SubtitleLabel = "Подзаголовок",
@@ -80,7 +82,9 @@ public sealed class WebCopy
         CardSettings = "Card settings",
         ScreenshotLabel = "Screenshot",
         DropScreenshot = "Drop screenshot",
+        DropScreenshotHint = "Drop a file anywhere on this panel or paste from the clipboard with Ctrl+V.",
         NoFileSelected = "No file selected",
+        UnsupportedDropFile = "Drop or paste an image file.",
         Browse = "Browse",
         TitleLabel = "Title",
         SubtitleLabel = "Subtitle",
@@ -150,7 +154,11 @@ public sealed class WebCopy
 
     public required string DropScreenshot { get; init; }
 
+    public required string DropScreenshotHint { get; init; }
+
     public required string NoFileSelected { get; init; }
+
+    public required string UnsupportedDropFile { get; init; }
 
     public required string Browse { get; init; }
 

@@ -95,6 +95,7 @@ When SnapForge is installed as a .NET tool from `.nupkg`, the command is `snapfo
 - JSON config files and batch mode.
 - Ready-to-run local Web app launched by `snapforge.exe`.
 - Russian and English Web UI language switch.
+- Screenshot upload through file picker, drag-and-drop onto the settings panel, or clipboard paste.
 - GitHub Actions CI and release workflow.
 - Prebuilt Web App archives, separate `snapforge-cli-*` archives, and a .NET tool package.
 - `SHA256SUMS.txt` for release asset verification.

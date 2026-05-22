@@ -22,7 +22,7 @@
     </header>
 
     <main class="workspace">
-        <section class="tool-panel" aria-labelledby="card-form-title">
+        <section class="tool-panel" aria-labelledby="card-form-title" data-upload-panel>
             <div class="panel-heading">
                 <h2 id="card-form-title">@Model.Text.CardSettings</h2>
                 <span>@Model.SelectedPresetSize</span>
@@ -34,7 +34,7 @@
 
                 <div class="field">
                     <label asp-for="Input.Screenshot">@Model.Text.ScreenshotLabel</label>
-                    <div class="dropzone" data-dropzone>
+                    <div class="dropzone" data-dropzone data-empty-text="@Model.Text.NoFileSelected" data-invalid-text="@Model.Text.UnsupportedDropFile">
                         <input
                             asp-for="Input.Screenshot"
                             type="file"
@@ -48,6 +48,7 @@
                         </div>
                         <span class="file-action">@Model.Text.Browse</span>
                     </div>
+                    <p class="field-hint">@Model.Text.DropScreenshotHint</p>
                 </div>
 
                 <div class="field">

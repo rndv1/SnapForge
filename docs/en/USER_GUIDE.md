@@ -24,6 +24,8 @@ On Windows, run `snapforge.exe`. The app opens the local Web UI in your browser.
 
 In the Web GUI, upload a screenshot, choose a preset, theme, background color, padding, and download the generated PNG.
 
+You can choose a screenshot with the file picker, drop it onto the settings panel, or paste it from the clipboard with `Ctrl+V`.
+
 The interface defaults to Russian. Use the `RU` / `EN` switch in the top-right corner to change languages.
 
 ## Generate One Card
