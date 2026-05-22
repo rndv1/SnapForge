@@ -24,6 +24,13 @@ app.Configure(config =>
             "--theme",
             "dark"
         ]);
+
+    config.AddCommand<BatchCommand>("batch")
+        .WithDescription("Generate multiple image cards from a batch JSON config.")
+        .WithExample([
+            "batch",
+            "./examples/snapforge.batch.json"
+        ]);
 });
 
 try
