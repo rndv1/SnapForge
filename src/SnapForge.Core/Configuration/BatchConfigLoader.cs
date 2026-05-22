@@ -2,13 +2,13 @@ using System.Text.Json;
 
 namespace SnapForge.Core.Configuration;
 
-public static class CardConfigLoader
+public static class BatchConfigLoader
 {
     private static readonly JsonSerializerOptions JsonOptions = ConfigurationJsonOptions.Create();
 
-    public static CardConfig Load(string path)
+    public static BatchConfig Load(string path)
     {
         using var stream = File.OpenRead(path);
-        return JsonSerializer.Deserialize<CardConfig>(stream, JsonOptions) ?? CardConfig.Empty;
+        return JsonSerializer.Deserialize<BatchConfig>(stream, JsonOptions) ?? new BatchConfig();
     }
 }

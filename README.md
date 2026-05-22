@@ -156,6 +156,40 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 
 Config files may set `input`, `output`, `title`, `subtitle`, `preset`, `theme`, `background`, and `padding`. Relative `input` and `output` paths in config files are resolved from the config file directory.
 
+## Batch Mode
+
+Use `batch` to generate multiple cards from one JSON file:
+
+```bash
+dotnet run --project src/SnapForge.Cli -- batch ./examples/snapforge.batch.json
+```
+
+Batch files use shared defaults plus per-card overrides:
+
+```json
+{
+  "defaults": {
+    "input": "./input/sample.png",
+    "title": "SnapForge",
+    "subtitle": "Batch-generated screenshot cards",
+    "preset": "github",
+    "theme": "dark"
+  },
+  "cards": [
+    {
+      "output": "./output/batch-github-dark.png"
+    },
+    {
+      "output": "./output/batch-open-graph-light.png",
+      "preset": "open-graph",
+      "theme": "light"
+    }
+  ]
+}
+```
+
+By default, batch mode keeps rendering after a failed card and exits with code `1` if any card fails. Use `--stop-on-error` to stop after the first failure.
+
 ## Web GUI
 
 SnapForge also includes a small ASP.NET Core Razor Pages interface for generating cards in the browser:
@@ -195,6 +229,7 @@ Open the local URL printed by ASP.NET Core, upload a screenshot, choose a preset
 - Supports optional custom background colors.
 - Supports optional card padding controls.
 - Supports JSON config files for repeatable project branding.
+- Supports batch mode for generating multiple cards from one JSON file.
 - Renders a title, subtitle, screenshot frame, border, shadow, and attribution.
 - Prints a structured console report with input, output, config, preset, theme, background color, padding, size, and status.
 - Provides a local Web GUI for browser-based generation.
@@ -260,6 +295,7 @@ SnapForge/
 │   └── SnapForge.Tests/
 ├── examples/
 │   ├── snapforge.config.json
+│   ├── snapforge.batch.json
 │   ├── input/
 │   └── output/
 ├── README.md
@@ -295,7 +331,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for branch, pull request, and verificatio
 SnapForge is intentionally small and focused. It is for developers who want a reliable way to create polished visuals without opening a design app, choosing templates, or manually resizing screenshots every time.
 
 The first version keeps the surface area narrow: one command, three presets, two themes, and predictable output.
-The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, optional card padding controls, and JSON config files while keeping the rendering model predictable.
+The current version adds a small Web GUI, Open Graph and presentation slide presets, optional custom background colors, optional card padding controls, JSON config files, and batch mode while keeping the rendering model predictable.
 
 ## Roadmap
 
@@ -328,7 +364,7 @@ The current version adds a small Web GUI, Open Graph and presentation slide pres
 - [x] Optional card padding controls
 - [x] Additional presets for presentation slides
 - [x] JSON config files for repeatable project branding
-- [ ] Batch mode for generating multiple cards
+- [x] Batch mode for generating multiple cards
 
 ## Made With C# And .NET
 
