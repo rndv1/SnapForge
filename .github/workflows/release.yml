@@ -189,7 +189,18 @@ jobs:
         run: dotnet restore
 
       - name: Pack
-        run: dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --output artifacts/packages
+        shell: bash
+        run: |
+          package_version="${GITHUB_REF_NAME#v}"
+
+          if [[ ! "$package_version" =~ ^[0-9]+(\.[0-9]+){1,3}([-.][0-9A-Za-z.-]+)?$ ]]; then
+            package_version="0.1.0-local"
+          fi
+
+          dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj \
+            --configuration Release \
+            -p:Version="$package_version" \
+            --output artifacts/packages
 
       - name: Upload .NET tool package
         uses: actions/upload-artifact@v7
