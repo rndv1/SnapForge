@@ -18,7 +18,7 @@ examples/
     └── sample-slide-dark.png
 ```
 
-`examples/output` игнорируется Git, кроме `.gitkeep` и документированных sample cards. Остальные generated cards остаются локальными по умолчанию.
+`examples/output` игнорируется Git, кроме `.gitkeep` и документированных примеров карточек. Остальные сгенерированные карточки остаются локальными по умолчанию.
 
 ## Подготовить входной скриншот
 
@@ -30,7 +30,7 @@ examples/
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --output ./examples/output/sample-github-dark.png \
   --title "SnapForge" \
-  --subtitle "Turn plain screenshots into GitHub-ready cards" \
+  --subtitle "Скриншоты, готовые для GitHub" \
   --preset github \
   --theme dark
 ```
@@ -43,25 +43,25 @@ Windows PowerShell:
 dotnet run --project src/SnapForge.Cli -- card .\examples\input\sample.png `
   --output .\examples\output\sample-github-dark.png `
   --title "SnapForge" `
-  --subtitle "Turn plain screenshots into GitHub-ready cards" `
+  --subtitle "Скриншоты, готовые для GitHub" `
   --preset github `
   --theme dark
 ```
 
 ## Другие пресеты
 
-Social card:
+Карточка для соцсетей:
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --output ./examples/output/sample-social-light.png \
   --title "SnapForge" \
-  --subtitle "Beautiful screenshot cards from the command line" \
+  --subtitle "Красивые карточки из командной строки" \
   --preset social \
   --theme light
 ```
 
-Portfolio card:
+Карточка для портфолио:
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -72,7 +72,7 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --theme dark
 ```
 
-Для link previews используйте `open-graph`, для презентаций — `slide` или `slide-4-3`.
+Для превью ссылок используйте `open-graph`, для презентаций — `slide` или `slide-4-3`.
 
 ## Пользовательский фон
 
@@ -80,25 +80,25 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --output ./examples/output/sample-custom-background.png \
   --title "SnapForge" \
-  --subtitle "Custom project-ready backgrounds" \
+  --subtitle "Настраиваемые фоны для проектов" \
   --preset github \
   --theme dark \
   --background "#0F172A"
 ```
 
-## Пользовательский padding
+## Пользовательский отступ
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --output ./examples/output/sample-custom-padding.png \
   --title "SnapForge" \
-  --subtitle "Adjustable card spacing" \
+  --subtitle "Настраиваемые отступы карточки" \
   --preset github \
   --theme dark \
   --padding 140
 ```
 
-## Config-driven card
+## Карточка из конфига
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
@@ -106,16 +106,16 @@ dotnet run --project src/SnapForge.Cli -- card ./examples/input/sample.png \
   --config ./examples/snapforge.config.json
 ```
 
-## Batch cards
+## Пакетная генерация
 
 ```bash
 dotnet run --project src/SnapForge.Cli -- batch ./examples/snapforge.batch.json
 ```
 
-Batch mode продолжает обработку после ошибки отдельной карточки и возвращает ненулевой код, если хотя бы одна карточка не сгенерировалась. Используйте `--stop-on-error`, если CI должен остановиться на первой ошибке.
+Пакетный режим продолжает обработку после ошибки отдельной карточки и возвращает ненулевой код, если хотя бы одна карточка не сгенерировалась. Используйте `--stop-on-error`, если CI должен остановиться на первой ошибке.
 
 ## Галерея
 
-| Input | Output |
+| Входное изображение | Результат |
 | --- | --- |
-| <img src="input/sample.png" alt="Raw sample screenshot" width="360"> | <img src="output/sample-github-dark.png" alt="Generated GitHub dark card" width="420"> |
+| <img src="input/sample.png" alt="Исходный пример скриншота" width="360"> | <img src="output/sample-github-dark.png" alt="Сгенерированная тёмная GitHub-карточка" width="420"> |

@@ -15,7 +15,7 @@
 src/
 ├── SnapForge.Core/   Общий рендеринг, конфиги, пресеты, темы и модели.
 ├── SnapForge.Cli/    CLI-команды Spectre.Console и упаковка tool-пакета.
-└── SnapForge.Web/    Локальный Web App на Razor Pages, публикуемый как snapforge.exe.
+└── SnapForge.Web/    Локальное веб-приложение на Razor Pages, публикуемое как snapforge.exe.
 
 tests/
 └── SnapForge.Tests/  xUnit-тесты реестров, конфигов и контрактов рендера.
@@ -37,8 +37,8 @@ dotnet pack src/SnapForge.Cli/SnapForge.Cli.csproj --configuration Release --no-
 
 SnapForge намеренно не использует тяжёлую архитектуру. Основные границы такие:
 
-- `SnapForge.Core` содержит рендеринг, модели, пресеты, темы, парсинг конфигов и helper-валидацию.
-- `SnapForge.Cli` отвечает за команды, консольный вывод, orchestration и упаковку .NET tool.
+- `SnapForge.Core` содержит рендеринг, модели, пресеты, темы, парсинг конфигов и вспомогательную валидацию.
+- `SnapForge.Cli` отвечает за команды, консольный вывод, координацию сценария и упаковку .NET tool.
 - `SnapForge.Web` отвечает за браузерный сценарий, локализацию интерфейса, запуск браузера и переиспользует `SnapForge.Core`.
 
 Новые возможности лучше добавлять рядом с этими границами, не перенося рендеринг в CLI или Web-слой.
@@ -50,9 +50,9 @@ SnapForge намеренно не использует тяжёлую архит
 1. Добавьте или обновите точечные тесты.
 2. Сгенерируйте хотя бы одну карточку из `examples/input/sample.png`.
 3. Посмотрите PNG перед PR.
-4. Обновляйте example images только если это намеренная часть документации.
+4. Обновляйте изображения примеров только если это намеренная часть документации.
 
-## Release flow
+## Процесс релиза
 
 Релизы собирает `.github/workflows/release.yml`.
 
@@ -63,4 +63,4 @@ git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
-Workflow публикует Web App архивы `snapforge-*`, отдельные CLI-архивы `snapforge-cli-*`, `.nupkg` и `SHA256SUMS.txt`.
+Рабочий процесс публикует архивы веб-приложения `snapforge-*`, отдельные CLI-архивы `snapforge-cli-*`, `.nupkg` и `SHA256SUMS.txt`.
