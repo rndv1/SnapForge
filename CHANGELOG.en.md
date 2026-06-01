@@ -6,6 +6,7 @@
 
 ### Added
 
+- Polished Russian documentation and translated the remaining English headings.
 - Release asset checksum generation with `SHA256SUMS.txt`.
 - Russian documentation as the default documentation language.
 - English documentation variants with language switch links.
