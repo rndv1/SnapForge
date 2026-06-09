@@ -27,6 +27,8 @@ Tests:
 ## Developer Documentation
 
 - `CONTRIBUTING.md`
+- `CODE_OF_CONDUCT.md`
+- `SECURITY.md`
 - `docs/DEVELOPER_GUIDE.md`
 
 ## Installer Or Site Link

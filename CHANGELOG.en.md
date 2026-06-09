@@ -6,6 +6,7 @@
 
 ### Added
 
+- Code of conduct and security policy for GitHub Community Standards.
 - Polished Russian documentation and translated the remaining English headings.
 - Release asset checksum generation with `SHA256SUMS.txt`.
 - Russian documentation as the default documentation language.
