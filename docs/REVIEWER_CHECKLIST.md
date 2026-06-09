@@ -28,7 +28,7 @@
 
 - `CONTRIBUTING.md`
 - `CODE_OF_CONDUCT.md`
-- `SECURITY.md`
+- `.github/SECURITY.md`
 - `docs/DEVELOPER_GUIDE.md`
 
 ## Установочник или ссылка на сайт

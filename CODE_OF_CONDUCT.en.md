@@ -22,7 +22,7 @@ SnapForge is an open-source project for developers. We want issues, pull request
 
 ## Reporting a Problem
 
-If you see a code of conduct issue, report it through a GitHub issue or contact the maintainer through their GitHub profile. If the report is security-related, do not publish details publicly and follow the [security policy](SECURITY.en.md).
+If you see a code of conduct issue, report it through a GitHub issue or contact the maintainer through their GitHub profile. If the report is security-related, do not publish details publicly and follow the [security policy](.github/SECURITY.en.md).
 
 Please include:
 

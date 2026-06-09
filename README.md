@@ -135,7 +135,7 @@ snapforge-cli batch <config> [--stop-on-error]
 - [Чеклист проверяющего](docs/REVIEWER_CHECKLIST.md)
 - [Участие в разработке](CONTRIBUTING.md)
 - [Кодекс поведения](CODE_OF_CONDUCT.md)
-- [Политика безопасности](SECURITY.md)
+- [Политика безопасности](.github/SECURITY.md)
 - [Журнал изменений](CHANGELOG.md)
 
 Английские версии доступны через переключатель языка в начале каждого документа.
