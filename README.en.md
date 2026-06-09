@@ -116,7 +116,7 @@ More examples are available in [examples/README.en.md](examples/README.en.md).
 - [Reviewer Checklist](docs/en/REVIEWER_CHECKLIST.md)
 - [Contributing](CONTRIBUTING.en.md)
 - [Code of Conduct](CODE_OF_CONDUCT.en.md)
-- [Security Policy](SECURITY.en.md)
+- [Security Policy](.github/SECURITY.en.md)
 - [Changelog](CHANGELOG.en.md)
 
 ## Project Structure

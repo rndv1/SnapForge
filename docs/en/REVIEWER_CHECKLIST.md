@@ -28,7 +28,7 @@ Tests:
 
 - `CONTRIBUTING.md`
 - `CODE_OF_CONDUCT.md`
-- `SECURITY.md`
+- `.github/SECURITY.md`
 - `docs/DEVELOPER_GUIDE.md`
 
 ## Installer Or Site Link

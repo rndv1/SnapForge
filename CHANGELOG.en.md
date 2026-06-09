@@ -16,6 +16,7 @@
 
 ### Changed
 
+- Security policy moved to `.github/SECURITY.md` so GitHub Community Standards can detect it consistently.
 - Release creation now uses GitHub CLI instead of a third-party release action.
 - CLI archives are renamed to `snapforge-cli-*` to separate terminal usage from the ready-to-run Web App.
 
